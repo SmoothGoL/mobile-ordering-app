@@ -1,3 +1,53 @@
+@font-face {
+    font-family: 'Inter';
+    font-display: swap;
+    font-weight: 100 900;
+    src: url('fonts/Inter-VariableFont.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Smythe';
+    font-display: swap;
+    font-weight: 400;
+    src: url('fonts/Smythe-Regular.woff2') format('woff2');
+}
+
 body {
     margin: 0;
+    font-weight: 400;
+    font-family: 'Smythe', system-ui;
 } 
+
+header {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.header-img {
+    width: 100%;
+    height: auto;
+}
+
+main {
+    padding: 22px 46px 0 46px;
+    width: 600px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+section {
+    margin-top: 45px;
+    /* border-bottom: 1px solid #d2d2d2; */
+    border: 1px solid red;
+    display: flex;
+}
+
+.dish-icon {
+    font-family: 'Inter';
+    font-size: 78px;
+}
+
+h2 {
+    font-size: 28px;
+}
+
