@@ -47,7 +47,19 @@ section {
     font-size: 78px;
 }
 
-h2 {
+.menu-item-title {
     font-size: 28px;
+    margin: 5px 0 0 0;
+    font-weight: 400;
 }
 
+.ingredients {
+    margin-top: 5px;
+    color: #8B8B8B;
+    font-size: 16px;
+}
+
+.price {
+    margin: 10px 0 0 0;
+    font-size: 20px;
+}

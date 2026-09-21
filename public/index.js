@@ -9,9 +9,9 @@ function getMenuHtml(menuItems) {
             <section>
                 <span class="dish-icon">${menuItem.emoji}</span>
                 <div>
-                    <h2>${menuItem.name}</h2>
+                    <h2 class="menu-item-title">${menuItem.name}</h2>
                     <p class="ingredients">${menuItem.ingredients.join(',')}</p>
-                    <p>$${menuItem.price}</p>
+                    <p class="price">$${menuItem.price}</p>
                 </div>
             </section>
         `;
