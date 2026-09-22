@@ -4,22 +4,21 @@ const menuItemsEl = document.querySelector('.menu-items');
 const orderEl = document.querySelector('.order');
 const myOrder = [0, 2];
 
-function getMenuHtml(menuItems) {
-    let outputHtml = '';
-    menuItems.forEach((menuItem) => {
-        outputHtml += `
-            <section class="menu-item">
-                <span class="dish-icon">${menuItem.emoji}</span>
-                <div class="menu-item-description">
-                    <h3 class="menu-item-title">${menuItem.name}</h3>
-                    <p class="ingredients">${menuItem.ingredients.join(',')}</p>
-                    <p class="price">$${menuItem.price}</p>
-                </div>
-                <button class="add-btn"><span class="add-btn-text">+</span></button>
-            </section>
-        `;
-    });
-    return outputHtml;
+document.addEventListener('click', (e) => {
+    if (e.target.dataset.addBtn) {
+        addItem(e.target.dataset.addBtn, myOrder)
+    } else if (e.target.parentElement.dataset.addBtn) {
+        addItem(e.target.parentElement.dataset.addBtn, myOrder);
+    }
+});
+
+function addItem(itemId, orderArr) {
+    orderArr.push(Number(itemId));
+    renderOrder(orderArr);
+}
+
+function renderOrder(orderArr) {
+    orderEl.innerHTML = getOrderHtml(orderArr);
 }
 
 function getOrderHtml(orderArr) {
@@ -49,8 +48,22 @@ function getOrderHtml(orderArr) {
     }
 }
 
-function renderOrder(orderArr) {
-    orderEl.innerHTML = getOrderHtml(orderArr);
+function getMenuHtml(menuItems) {
+    let outputHtml = '';
+    menuItems.forEach((menuItem) => {
+        outputHtml += `
+            <section class="menu-item">
+                <span class="dish-icon">${menuItem.emoji}</span>
+                <div class="menu-item-description">
+                    <h3 class="menu-item-title">${menuItem.name}</h3>
+                    <p class="ingredients">${menuItem.ingredients.join(',')}</p>
+                    <p class="price">$${menuItem.price}</p>
+                </div>
+                <button class="add-btn" data-add-btn="${menuItem.id}"><span class="add-btn-text">+</span></button>
+            </section>
+        `;
+    });
+    return outputHtml;
 }
 
 menuItemsEl.innerHTML = getMenuHtml(menuArray);
