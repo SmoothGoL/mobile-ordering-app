@@ -26,6 +26,7 @@ paymentForm.addEventListener('submit', (e) => {
     paymentModalEl.style.display = 'none';
     orderEl.innerHTML = '';
     myOrder.length = 0;
+    paymentForm.reset();
     renderThankYouMessage(paymentFormData.get('name'));
 });
 
