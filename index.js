@@ -3,7 +3,9 @@ import { menuArray } from './data.js';
 const menuItemsEl = document.getElementById('menu-items');
 const orderEl = document.getElementById('order');
 const paymentModalEl = document.getElementById('payment-modal');
-const myOrder = [0, 2];
+const paymentForm = document.getElementById('payment-form');
+const thankYouMessageContainer = document.getElementById('thank-you-message-container');
+const myOrder = [];
 
 document.addEventListener('click', (e) => {
     if (e.target.dataset.addBtn) {
@@ -14,14 +16,26 @@ document.addEventListener('click', (e) => {
         removeOrderItem(e.target.dataset.removeOrderIndex, myOrder);
     } else if (e.target.id === 'complete-order-btn') {
         paymentModalEl.style.display = 'block';
-    } else if (!paymentModalEl.contains(e.target)) {
-        paymentModalEl.style.display = 'none';
     }
 });
 
-document.addEventListener('submit', (e) => {
+paymentForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const paymentFormData = new FormData(paymentForm);
+    console.log(paymentFormData.get('card-number'));
+    paymentModalEl.style.display = 'none';
+    orderEl.innerHTML = '';
+    myOrder.length = 0;
+    renderThankYouMessage(paymentFormData.get('name'));
 });
+
+function renderThankYouMessage(name) {
+    const thankYouMessage = document.createElement('p');
+    thankYouMessage.classList.add('thank-you-message');
+    thankYouMessage.textContent = `Thanks, ${name}! Your order is on its way!`;
+    thankYouMessageContainer.appendChild(thankYouMessage);
+    thankYouMessageContainer.style.display = 'block';
+}
 
 function addItem(itemId, orderArr) {
     orderArr.push(Number(itemId));
@@ -34,6 +48,7 @@ function removeOrderItem(id, orderArr) {
 }
 
 function renderOrder(orderArr) {
+    thankYouMessageContainer.style.display = 'none';
     orderEl.innerHTML = getOrderHtml(orderArr);
 }
 
@@ -79,4 +94,4 @@ function getOrderHtml(orderArr) {
 }
 
 menuItemsEl.innerHTML = getMenuHtml(menuArray);
-renderOrder(myOrder);
+// renderOrder(myOrder);

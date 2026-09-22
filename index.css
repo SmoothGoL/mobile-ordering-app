@@ -38,7 +38,7 @@ header {
 }
 
 main {
-    padding: 22px 45px 20px 45px;
+    padding: 22px 45px 30px 45px;
     width: 600px;
     margin: 0 auto;
     box-sizing: border-box;
@@ -207,4 +207,23 @@ main {
     font-size: 20px;
     font-weight: 700;
     color: #fff;
+}
+
+.thank-you-message-container {
+    background: #ECFDF5;
+    border-radius: 3px;
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    color: #065F46;
+    padding: 50px 50px;
+    margin-top: 45px;
+    display: none;
+}
+
+.thank-you-message {
+    margin: 0;
 }
