@@ -22,6 +22,11 @@ button {
     cursor: pointer;
 }
 
+button:disabled {
+    cursor: not-allowed;
+    background: #ddd;
+}
+
 header {
     width: 600px;
     margin: 0 auto;
@@ -148,8 +153,58 @@ main {
     border: none;
     background: #16DB99;
     font-size: 16px;
-    font-family: Verdana, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: #fff;
     font-weight: 700;
     margin-top: 45px;
+}
+
+.payment-modal {
+    box-shadow: 5.19px 5.19px 255.44px 0 #00000080;
+    width: 524px;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    position: absolute;
+    top: 292px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 4px;
+    padding: 0 24px 30px 24px;
+    display: none;
+}
+
+.modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin: 47px 0 46px 0;
+}
+
+.modal-input {
+    width: 100%;
+    height: 71.3px;
+    margin-bottom: 23px;
+    padding-left: 26.5px;
+    box-sizing: border-box;
+}
+
+.modal-input::placeholder {
+    font-size: 20px;
+    color: #757575;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+}
+
+.modal-submit-btn {
+    height: 71.3px;
+    width: 100%;
+    margin-top: 23.5px;
+    border: none;
+    border-radius: 4px;
+    background: #16DB99;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
 }

@@ -11,6 +11,8 @@ document.addEventListener('click', (e) => {
         addItem(e.target.parentElement.dataset.addBtn, myOrder);
     } else if (e.target.dataset.removeOrderIndex) {
         removeOrderItem(e.target.dataset.removeOrderIndex, myOrder);
+    } else if (e.target.id === 'complete-order-btn') {
+        console.log('complete order');
     }
 });
 
@@ -26,6 +28,24 @@ function removeOrderItem(id, orderArr) {
 
 function renderOrder(orderArr) {
     orderEl.innerHTML = getOrderHtml(orderArr);
+}
+
+function getMenuHtml(menuItems) {
+    let outputHtml = '';
+    menuItems.forEach((menuItem) => {
+        outputHtml += `
+            <section class="menu-item">
+                <span class="dish-icon">${menuItem.emoji}</span>
+                <div class="menu-item-description">
+                    <h3 class="menu-item-title">${menuItem.name}</h3>
+                    <p class="ingredients">${menuItem.ingredients.join(',')}</p>
+                    <p class="price">$${menuItem.price}</p>
+                </div>
+                <button class="add-btn" data-add-btn="${menuItem.id}"><span class="add-btn-text">+</span></button>
+            </section>
+        `;
+    });
+    return outputHtml;
 }
 
 function getOrderHtml(orderArr) {
@@ -47,25 +67,7 @@ function getOrderHtml(orderArr) {
             <span class="total-price">Total price:</span>
             <span class="order-price">$${totalPrice}</span>
         </div>
-        <button class="complete-order-btn">Complete order</button>`;
-    return outputHtml;
-}
-
-function getMenuHtml(menuItems) {
-    let outputHtml = '';
-    menuItems.forEach((menuItem) => {
-        outputHtml += `
-            <section class="menu-item">
-                <span class="dish-icon">${menuItem.emoji}</span>
-                <div class="menu-item-description">
-                    <h3 class="menu-item-title">${menuItem.name}</h3>
-                    <p class="ingredients">${menuItem.ingredients.join(',')}</p>
-                    <p class="price">$${menuItem.price}</p>
-                </div>
-                <button class="add-btn" data-add-btn="${menuItem.id}"><span class="add-btn-text">+</span></button>
-            </section>
-        `;
-    });
+        <button id="complete-order-btn" class="complete-order-btn" ${orderArr.length > 0 ? '' : 'disabled'}>Complete order</button>`;
     return outputHtml;
 }
 
