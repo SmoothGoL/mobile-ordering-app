@@ -175,6 +175,19 @@ main {
     display: none;
 }
 
+.modal-close-btn {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    border: none;
+    background: #fff;
+    font-size: 20px;
+}
+
+.modal-close-btn:hover {
+    color: red;
+}
+
 .modal-title {
     font-size: 24px;
     font-weight: 700;

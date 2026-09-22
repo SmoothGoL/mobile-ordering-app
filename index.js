@@ -16,6 +16,8 @@ document.addEventListener('click', (e) => {
         removeOrderItem(e.target.dataset.removeOrderIndex, myOrder);
     } else if (e.target.id === 'complete-order-btn') {
         paymentModalEl.style.display = 'block';
+    } else if (e.target.id === 'modal-close-btn') {
+        paymentModalEl.style.display = 'none'
     }
 });
 
