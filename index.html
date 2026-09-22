@@ -12,16 +12,16 @@
             alt="The restaurant header image with the title, 'Jimmy&apos;s Diner - The best burgers and pizzas in town.'">
     </header>
     <main>
-        <section class="menu-items"></section>
-        <section class="order"></section>
+        <section id="menu-items" class="menu-items"></section>
+        <section id="order" class="order"></section>
     </main>
-    <div class="payment-modal">
+    <div class="payment-modal" id="payment-modal">
         <h2 class="modal-title">Enter card details</h2>
         <form>
             <input class="modal-input" type="text" name="name" placeholder="Enter your name" required>
             <input class="modal-input" type="text" name="card-number" placeholder="Enter card number" required>
             <input class="modal-input" type="text" name="cvv" placeholder="Enter CVV" required>
-            <button class="modal-submit-btn" type="submit">Pay</button>
+            <button id="modal-submit-btn" class="modal-submit-btn" type="submit">Pay</button>
         </form>
     </div>
     <script src="index.js" type="module"></script>

@@ -1,7 +1,8 @@
 import { menuArray } from './data.js';
 
-const menuItemsEl = document.querySelector('.menu-items');
-const orderEl = document.querySelector('.order');
+const menuItemsEl = document.getElementById('menu-items');
+const orderEl = document.getElementById('order');
+const paymentModalEl = document.getElementById('payment-modal');
 const myOrder = [0, 2];
 
 document.addEventListener('click', (e) => {
@@ -12,8 +13,14 @@ document.addEventListener('click', (e) => {
     } else if (e.target.dataset.removeOrderIndex) {
         removeOrderItem(e.target.dataset.removeOrderIndex, myOrder);
     } else if (e.target.id === 'complete-order-btn') {
-        console.log('complete order');
+        paymentModalEl.style.display = 'block';
+    } else if (!paymentModalEl.contains(e.target)) {
+        paymentModalEl.style.display = 'none';
     }
+});
+
+document.addEventListener('submit', (e) => {
+    e.preventDefault();
 });
 
 function addItem(itemId, orderArr) {
