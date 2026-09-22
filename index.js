@@ -9,6 +9,8 @@ document.addEventListener('click', (e) => {
         addItem(e.target.dataset.addBtn, myOrder)
     } else if (e.target.parentElement.dataset.addBtn) {
         addItem(e.target.parentElement.dataset.addBtn, myOrder);
+    } else if (e.target.dataset.removeOrderIndex) {
+        removeOrderItem(e.target.dataset.removeOrderIndex, myOrder);
     }
 });
 
@@ -17,35 +19,36 @@ function addItem(itemId, orderArr) {
     renderOrder(orderArr);
 }
 
+function removeOrderItem(id, orderArr) {
+    orderArr.splice(Number(id), 1);
+    renderOrder(orderArr);
+}
+
 function renderOrder(orderArr) {
     orderEl.innerHTML = getOrderHtml(orderArr);
 }
 
 function getOrderHtml(orderArr) {
-    if (orderArr.length > 0) {
-        let outputHtml = '<h2 class="order-title">Your order</h2>';
-        let totalPrice = 0;
-        orderArr.forEach((orderId, index) => {
-            const orderItem = menuArray.filter(menuItem => menuItem.id === orderId)[0];
-            outputHtml += `<div class="order-item-container">
-                <span class="order-item">${orderItem.name}</span>
-                <button class="remove-btn" data-remove-order-index="${index}">remove</button>
-                <span class="order-price">$${orderItem.price}</span>
-            </div>`;
-            totalPrice += orderItem.price;
-        });
+    let outputHtml = '<h2 class="order-title">Your order</h2>';
+    let totalPrice = 0;
+    orderArr.forEach((orderId, index) => {
+        const orderItem = menuArray.filter(menuItem => menuItem.id === orderId)[0];
+        outputHtml += `<div class="order-item-container">
+            <span class="order-item">${orderItem.name}</span>
+            <button class="remove-btn" data-remove-order-index="${index}">remove</button>
+            <span class="order-price">$${orderItem.price}</span>
+        </div>`;
+        totalPrice += orderItem.price;
+    });
 
-        outputHtml += `
-            <hr class="order-hr">
-            <div class="total-price-container">
-                <span class="total-price">Total price:</span>
-                <span class="order-price">$${totalPrice}</span>
-            </div>
-            <button class="complete-order-btn">Complete order</button>`;
-        return outputHtml;
-    } else {
-        return '';
-    }
+    outputHtml += `
+        <hr class="order-hr">
+        <div class="total-price-container">
+            <span class="total-price">Total price:</span>
+            <span class="order-price">$${totalPrice}</span>
+        </div>
+        <button class="complete-order-btn">Complete order</button>`;
+    return outputHtml;
 }
 
 function getMenuHtml(menuItems) {

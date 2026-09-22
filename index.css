@@ -18,6 +18,10 @@ body {
     font-family: 'Smythe', system-ui;
 } 
 
+button {
+    cursor: pointer;
+}
+
 header {
     width: 600px;
     margin: 0 auto;
@@ -112,6 +116,10 @@ main {
     color: #bbb;
     border: none;
     background: #fff;
+}
+
+.remove-btn:hover {
+    text-decoration-line: underline;
 }
 
 .order-price {
