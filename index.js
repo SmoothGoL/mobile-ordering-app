@@ -5,7 +5,12 @@ const orderEl = document.getElementById('order');
 const paymentModalEl = document.getElementById('payment-modal');
 const paymentForm = document.getElementById('payment-form');
 const thankYouMessageContainer = document.getElementById('thank-you-message-container');
+const windowWidthDisplayEl = document.getElementById('window-width');
 const myOrder = [];
+
+window.addEventListener('resize', () => {
+    windowWidthDisplayEl.textContent = window.innerWidth;
+});
 
 document.addEventListener('click', (e) => {
     if (e.target.dataset.addBtn) {
@@ -63,7 +68,7 @@ function getMenuHtml(menuItems) {
                 <span class="dish-icon">${menuItem.emoji}</span>
                 <div class="menu-item-description">
                     <h3 class="menu-item-title">${menuItem.name}</h3>
-                    <p class="ingredients">${menuItem.ingredients.join(',')}</p>
+                    <p class="ingredients">${menuItem.ingredients.join(', ')}</p>
                     <p class="price">$${menuItem.price}</p>
                 </div>
                 <button class="add-btn" data-add-btn="${menuItem.id}"><span class="add-btn-text">+</span></button>

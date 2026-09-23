@@ -28,7 +28,8 @@ button:disabled {
 }
 
 header {
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     margin: 0 auto;
 }
 
@@ -39,17 +40,18 @@ header {
 
 main {
     padding: 22px 45px 30px 45px;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     margin: 0 auto;
     box-sizing: border-box;
 }
 
 .menu-item {
-    margin-top: 45px;
+    margin-top: min(45px, 7.5vw);
     border-bottom: 1px solid #d2d2d2;
     /* border: 1px solid red; */
     display: flex;
-    padding-bottom: 48px;
+    padding-bottom: min(48px, 8vw);
 }
 
 .dish-icon {
@@ -62,20 +64,22 @@ main {
 }
 
 .menu-item-title {
-    font-size: 28px;
-    margin: 5px 0 0 0;
+    font-size: 1.75em;
+    margin: 0.1786em 0; /* 5px */
     font-weight: 400;
 }
 
+
+
 .ingredients {
-    margin-top: 5px;
+    margin-top: 0;
     color: #8B8B8B;
-    font-size: 16px;
+    font-size: 1em;
 }
 
 .price {
-    margin: 10px 0 0 0;
-    font-size: 20px;
+    margin: 0.5em 0 0;
+    font-size: 1.25em;
 }
 
 .add-btn {
@@ -93,7 +97,30 @@ main {
     justify-content: center;
     padding: 0;
     margin: 15px 0 0 auto;
-    
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding: 0px 4vw 30px;
+    }
+
+    .menu-item {
+        
+        /* font-size: 0.8rem; */
+    }
+
+    .dish-icon {
+        font-size: max(13vw, 50px);
+    }
+
+    .menu-item-description {
+        margin-left: 3vw;
+    }
+
+    .add-btn {
+        margin: 2.5vw 0 0 auto;
+    }
 }
 
 .add-btn-text {
@@ -161,7 +188,8 @@ main {
 
 .payment-modal {
     box-shadow: 5.19px 5.19px 255.44px 0 #00000080;
-    width: 524px;
+    width: 95%;
+    max-width: 524px;
     box-sizing: border-box;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     position: fixed;
@@ -200,6 +228,7 @@ main {
     margin-bottom: 23px;
     padding-left: 26.5px;
     box-sizing: border-box;
+    font-size: 20px;
 }
 
 .modal-input::placeholder {
