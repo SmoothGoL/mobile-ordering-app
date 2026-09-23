@@ -103,3 +103,4 @@ function getOrderHtml(orderArr) {
 
 menuItemsEl.innerHTML = getMenuHtml(menuArray);
 // renderOrder(myOrder);
+windowWidthDisplayEl.textContent = window.innerWidth;

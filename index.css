@@ -64,22 +64,20 @@ main {
 }
 
 .menu-item-title {
-    font-size: 1.75em;
+    font-size: 28px;
     margin: 0.1786em 0; /* 5px */
     font-weight: 400;
 }
 
-
-
 .ingredients {
     margin-top: 0;
     color: #8B8B8B;
-    font-size: 1em;
+    font-size: 16px;
 }
 
 .price {
     margin: 0.5em 0 0;
-    font-size: 1.25em;
+    font-size: 20px;
 }
 
 .add-btn {
@@ -100,14 +98,14 @@ main {
     flex-shrink: 0;
 }
 
+.add-btn-text {
+    line-height: 0;
+    transform: translateY(-1px);
+}
+
 @media (max-width: 600px) {
     main {
         padding: 0px 4vw 30px;
-    }
-
-    .menu-item {
-        
-        /* font-size: 0.8rem; */
     }
 
     .dish-icon {
@@ -121,11 +119,6 @@ main {
     .add-btn {
         margin: 2.5vw 0 0 auto;
     }
-}
-
-.add-btn-text {
-    line-height: 0;
-    transform: translateY(-1px);
 }
 
 .order-title {
