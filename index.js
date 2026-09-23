@@ -5,12 +5,12 @@ const orderEl = document.getElementById('order');
 const paymentModalEl = document.getElementById('payment-modal');
 const paymentForm = document.getElementById('payment-form');
 const thankYouMessageContainer = document.getElementById('thank-you-message-container');
-const windowWidthDisplayEl = document.getElementById('window-width');
+// const windowWidthDisplayEl = document.getElementById('window-width');
 const myOrder = [];
 
-window.addEventListener('resize', () => {
-    windowWidthDisplayEl.textContent = window.innerWidth;
-});
+// window.addEventListener('resize', () => {
+//     windowWidthDisplayEl.textContent = window.innerWidth;
+// });
 
 document.addEventListener('click', (e) => {
     if (e.target.dataset.addBtn) {
@@ -103,4 +103,4 @@ function getOrderHtml(orderArr) {
 
 menuItemsEl.innerHTML = getMenuHtml(menuArray);
 // renderOrder(myOrder);
-windowWidthDisplayEl.textContent = window.innerWidth;
+// windowWidthDisplayEl.textContent = window.innerWidth;

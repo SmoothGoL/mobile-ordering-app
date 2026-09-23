@@ -103,24 +103,6 @@ main {
     transform: translateY(-1px);
 }
 
-@media (max-width: 600px) {
-    main {
-        padding: 0px 4vw 30px;
-    }
-
-    .dish-icon {
-        font-size: max(13vw, 50px);
-    }
-
-    .menu-item-description {
-        margin-left: 3vw;
-    }
-
-    .add-btn {
-        margin: 2.5vw 0 0 auto;
-    }
-}
-
 .order-title {
     font-size: 28px;
     text-align: center;
@@ -260,4 +242,28 @@ main {
 
 .thank-you-message {
     margin: 0;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding: 0px 4vw 30px;
+    }
+
+    .dish-icon {
+        font-size: max(13vw, 50px);
+    }
+
+    .menu-item-description {
+        margin-left: 3vw;
+    }
+
+    .add-btn {
+        margin: 2.5vw 0 0 auto;
+    }
+}
+
+@media (max-width: 350px) {
+    .modal-input {
+        padding-left: 12px;
+    }
 }
