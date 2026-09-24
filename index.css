@@ -15,7 +15,7 @@
 body {
     margin: 0;
     font-weight: 400;
-    font-family: 'Smythe', system-ui;
+    font-family: 'Smythe', cursive, serif;
 } 
 
 button {

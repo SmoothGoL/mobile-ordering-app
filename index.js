@@ -34,7 +34,7 @@ paymentForm.addEventListener('submit', (e) => {
     orderEl.innerHTML = '';
     myOrder.length = 0;
     paymentForm.reset();
-    renderThankYouMessage(paymentFormData.get('name'));
+    renderThankYouMessage(paymentFormData.get('name').trim());
 });
 
 function renderThankYouMessage(name) {
