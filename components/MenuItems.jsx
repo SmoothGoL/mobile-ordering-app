@@ -1,4 +1,4 @@
-import { menuArray } from "../src/assets/data";
+import { menuArray } from '../src/assets/data';
 
 export default function MenuItems() {
     const outputHtml = menuArray.map(menuItem => {
