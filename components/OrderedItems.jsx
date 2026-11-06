@@ -2,27 +2,27 @@ import { menuArray } from '../src/assets/data';
 
 export default function OrderedItems(props) {
     function removeOrderItem(e) {
-        const indexToExclude = parseInt(e.currentTarget.dataset.removeOrderIndex);
+        const orderIdToExclude = parseInt(e.currentTarget.dataset.removeOrderId);
         props.setOrderArr(prevOrderArr => {
-            return prevOrderArr.filter((orderItem, index) => index !== indexToExclude);
+            return prevOrderArr.filter(orderItem => orderItem.orderId !== orderIdToExclude);
         });
     }
 
     function getTotalPrice() {
         let totalPrice = 0;
-        props.orderArr.forEach(itemId => {
-            totalPrice += menuArray[itemId].price;
+        props.orderArr.forEach(orderItem => {
+            totalPrice += menuArray[orderItem.itemId].price;
         });
         return totalPrice;
     }
 
-    const outputHtml = props.orderArr.map((orderId, index) => {
-        const orderItem = menuArray.filter(menuItem => menuItem.id === orderId)[0];
+    const outputHtml = props.orderArr.map(orderItem => {
+        const orderedMenuItem = menuArray.filter(menuItem => menuItem.id === orderItem.itemId)[0];
         return (
-            <div className="order-item-container">
-                <span className="order-item">{orderItem.name}</span>
-                <button className="remove-btn" data-remove-order-index={index} onClick={removeOrderItem}>remove</button>
-                <span className="order-price">${orderItem.price}</span>
+            <div className="order-item-container" key={orderItem.orderId}>
+                <span className="order-item">{orderedMenuItem.name}</span>
+                <button className="remove-btn" data-remove-order-id={orderItem.orderId} onClick={removeOrderItem}>remove</button>
+                <span className="order-price">${orderedMenuItem.price}</span>
             </div>
         );
     });

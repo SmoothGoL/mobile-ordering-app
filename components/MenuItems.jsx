@@ -1,9 +1,13 @@
 import { menuArray } from '../src/assets/data';
+import { useState } from 'react';
 
 export default function MenuItems(props) {
+    const [currentOrderId, setCurrentOrderId] = useState(0);
+
     function addItem(e) {
         const newItemId = parseInt(e.currentTarget.dataset.itemId);
-        props.setOrderArr(prevOrderArr => [...prevOrderArr, newItemId])
+        props.setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, orderId: currentOrderId}]);
+        setCurrentOrderId(prevOrderId => prevOrderId + 1);
     }
 
     const outputHtml = menuArray.map(menuItem => {
