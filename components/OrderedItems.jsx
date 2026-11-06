@@ -1,5 +1,4 @@
 import { menuArray } from '../src/assets/data';
-import { useState } from 'react';
 
 export default function OrderedItems(props) {
     function removeOrderItem(e) {

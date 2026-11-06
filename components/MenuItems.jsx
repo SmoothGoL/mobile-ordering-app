@@ -8,7 +8,7 @@ export default function MenuItems(props) {
 
     const outputHtml = menuArray.map(menuItem => {
         return (
-            <section className="menu-item">
+            <section className="menu-item" key={menuItem.id}>
                 <span className="dish-icon">{menuItem.emoji}</span>
                 <div className="menu-item-description">
                     <h3 className="menu-item-title">{menuItem.name}</h3>
