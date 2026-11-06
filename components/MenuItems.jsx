@@ -1,16 +1,14 @@
 import { menuArray } from '../src/assets/data';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
-export default function MenuItems(props) {
+const MenuItems =  memo(function MenuItems(props) {
     const [currentOrderId, setCurrentOrderId] = useState(0);
 
     function addItem(e) {
         const newItemId = parseInt(e.currentTarget.dataset.itemId);
         props.setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, orderId: currentOrderId}]);
         setCurrentOrderId(prevOrderId => prevOrderId + 1);
-        if (props.appStatus !== 'ordering') {
-            props.setAppStatus('ordering')
-        }
+        props.setAppStatus('ordering')
     }
 
     const outputHtml = menuArray.map(menuItem => {
@@ -32,5 +30,6 @@ export default function MenuItems(props) {
             {outputHtml}
         </section>
     );
-}
+});
 
+export default MenuItems;

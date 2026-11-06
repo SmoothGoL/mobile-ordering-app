@@ -1,4 +1,4 @@
-import headerImage from './src/assets/images/header.png';
+import Header from './components/Header';
 import PaymentModal from './components/PaymentModal';
 import { useState } from 'react';
 import ThankYouMessage from './components/ThankYouMessage';
@@ -13,14 +13,10 @@ export default function App() {
 
     return (
         <>
-            <header>
-                <img className="header-img" src={headerImage}
-                    alt="The restaurant header image with the title, 'Jimmy&apos;s Diner - The best burgers and pizzas in town.'" />
-            </header>
+            <Header />
             <main>
                 <MenuItems 
-                    setOrderArr={setOrderArr} 
-                    appStatus={appStatus}
+                    setOrderArr={setOrderArr}
                     setAppStatus={setAppStatus}
                 />
                 {(appStatus === 'ordering' || appStatus === 'paying') && 
