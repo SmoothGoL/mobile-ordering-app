@@ -4,6 +4,7 @@ export default function PaymentModal(props) {
         e.preventDefault();
         const paymentFormData = new FormData(e.currentTarget);
         props.setUserName(paymentFormData.get('name').trim());
+        props.setOrderArr([]);
         props.setIsPaymentModalVisible(prevIsVisible => !prevIsVisible);
         props.setIsThankYouMessageVisible(prevIsVisible => !prevIsVisible);
     }

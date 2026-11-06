@@ -2,28 +2,40 @@ import { menuArray } from '../src/assets/data';
 import { useState } from 'react';
 
 export default function OrderedItems(props) {
-    const [totalPrice, setTotalPrice] = useState(0);
+    function removeOrderItem(e) {
+        const indexToExclude = parseInt(e.currentTarget.dataset.removeOrderIndex);
+        props.setOrderArr(prevOrderArr => {
+            return prevOrderArr.filter((orderItem, index) => index !== indexToExclude);
+        });
+    }
+
+    function getTotalPrice() {
+        let totalPrice = 0;
+        props.orderArr.forEach(itemId => {
+            totalPrice += menuArray[itemId].price;
+        });
+        return totalPrice;
+    }
 
     const outputHtml = props.orderArr.map((orderId, index) => {
         const orderItem = menuArray.filter(menuItem => menuItem.id === orderId)[0];
-        setTotalPrice(prevTotalPrice => prevTotalPrice + orderItem.price);
         return (
-            <div class="order-item-container">
-                <span class="order-item">{orderItem.name}</span>
-                <button class="remove-btn" data-remove-order-index={index}>remove</button>
-                <span class="order-price">${orderItem.price}</span>
+            <div className="order-item-container">
+                <span className="order-item">{orderItem.name}</span>
+                <button className="remove-btn" data-remove-order-index={index} onClick={removeOrderItem}>remove</button>
+                <span className="order-price">${orderItem.price}</span>
             </div>
         );
     });
 
     return (
         <section id="order" className="order">
-            <h2 class="order-title">Your order</h2>
+            <h2 className="order-title">Your order</h2>
             {outputHtml}
-            <hr class="order-hr" />
-            <div class="total-price-container">
-                <span class="total-price">Total price:</span>
-                <span class="order-price">$${totalPrice}</span>
+            <hr className="order-hr" />
+            <div className="total-price-container">
+                <span className="total-price">Total price:</span>
+                <span className="order-price">${getTotalPrice()}</span>
             </div>
             <button
                 id="complete-order-btn"

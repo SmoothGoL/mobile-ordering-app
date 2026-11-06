@@ -20,15 +20,16 @@ export default function App() {
             <main>
                 <MenuItems setOrderArr={setOrderArr} />
                 {orderArr.length > 0 && 
-                    <OrderedItems setOrderArr={setOrderArr} />
+                    <OrderedItems setOrderArr={setOrderArr} orderArr={orderArr} />
                 }
-                {isThankYouMessageVisible && <ThankYouMessage userName={userName} />}
+                {orderArr.length === 0 && isThankYouMessageVisible && <ThankYouMessage userName={userName} />}
             </main>
             {isPaymentModalVisible && 
                 <PaymentModal 
                     setIsPaymentModalVisible={setIsPaymentModalVisible} 
                     setIsThankYouMessageVisible={setIsThankYouMessageVisible}
                     setUserName={setUserName}
+                    setOrderArr={setOrderArr}
                 />
             }
         </>

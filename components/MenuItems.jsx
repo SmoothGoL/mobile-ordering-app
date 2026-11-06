@@ -1,16 +1,21 @@
 import { menuArray } from '../src/assets/data';
 
-export default function MenuItems() {
+export default function MenuItems(props) {
+    function addItem(e) {
+        const newItemId = parseInt(e.currentTarget.dataset.itemId);
+        props.setOrderArr(prevOrderArr => [...prevOrderArr, newItemId])
+    }
+
     const outputHtml = menuArray.map(menuItem => {
         return (
-            <section class="menu-item">
-                <span class="dish-icon">{menuItem.emoji}</span>
-                <div class="menu-item-description">
-                    <h3 class="menu-item-title">{menuItem.name}</h3>
-                    <p class="ingredients">{menuItem.ingredients.join(', ')}</p>
-                    <p class="price">${menuItem.price}</p>
+            <section className="menu-item">
+                <span className="dish-icon">{menuItem.emoji}</span>
+                <div className="menu-item-description">
+                    <h3 className="menu-item-title">{menuItem.name}</h3>
+                    <p className="ingredients">{menuItem.ingredients.join(', ')}</p>
+                    <p className="price">${menuItem.price}</p>
                 </div>
-                <button class="add-btn" data-add-btn="${menuItem.id}"><span class="add-btn-text">+</span></button>
+                <button className="add-btn" data-item-id={menuItem.id} onClick={addItem}><span className="add-btn-text">+</span></button>
             </section>
         );
     });

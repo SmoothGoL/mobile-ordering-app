@@ -2,14 +2,14 @@
     font-family: 'Inter';
     font-display: swap;
     font-weight: 100 900;
-    src: url('fonts/Inter-VariableFont.woff2') format('woff2');
+    src: url('./assets/fonts/Inter-VariableFont.woff2') format('woff2');
 }
 
 @font-face {
     font-family: 'Smythe';
     font-display: swap;
     font-weight: 400;
-    src: url('fonts/Smythe-Regular.woff2') format('woff2');
+    src: url('./assets/fonts/Smythe-Regular.woff2') format('woff2');
 }
 
 body {
