@@ -1,4 +1,6 @@
-export default function PaymentModal(props) {
+import { memo } from 'react';
+
+const PaymentModal = memo(function PaymentModal(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -13,7 +15,7 @@ export default function PaymentModal(props) {
     }
 
     return (
-        <div className="payment-modal" id="payment-modal">
+        <div className="payment-modal" style={{display: (props.isVisible ? 'block' : 'none')}} id="payment-modal">
             <h2 className="modal-title">Enter card details</h2>
             <form id="payment-form" onSubmit={handleSubmit}>
                 <input className="modal-input" type="text" name="name" placeholder="Enter your name" required />
@@ -24,5 +26,6 @@ export default function PaymentModal(props) {
             <button id="modal-close-btn" className="modal-close-btn" onClick={handleClose}>X</button>
         </div>
     );
-}
+});
 
+export default PaymentModal;

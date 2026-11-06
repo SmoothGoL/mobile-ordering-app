@@ -28,13 +28,12 @@ export default function App() {
                 }
                 {appStatus === 'success' && <ThankYouMessage userName={userName} />}
             </main>
-            {appStatus === 'paying' && 
-                <PaymentModal 
-                    setAppStatus={setAppStatus}
-                    setUserName={setUserName}
-                    setOrderArr={setOrderArr}
-                />
-            }
+            <PaymentModal 
+                setAppStatus={setAppStatus}
+                setUserName={setUserName}
+                setOrderArr={setOrderArr}
+                isVisible={appStatus === 'paying' ? true : false}
+            />
         </>
     );
 }
