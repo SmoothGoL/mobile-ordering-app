@@ -3,7 +3,6 @@ import { menuArray } from './data.js';
 const menuItemsEl = document.getElementById('menu-items');
 const orderEl = document.getElementById('order');
 const paymentModalEl = document.getElementById('payment-modal');
-const paymentForm = document.getElementById('payment-form');
 const thankYouMessageContainer = document.getElementById('thank-you-message-container');
 // const windowWidthDisplayEl = document.getElementById('window-width');
 const myOrder = [];
@@ -26,29 +25,30 @@ document.addEventListener('click', (e) => {
     }
 });
 
-paymentForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const paymentFormData = new FormData(paymentForm);
-    console.log(paymentFormData.get('card-number'));
-    paymentModalEl.style.display = 'none';
-    orderEl.innerHTML = '';
-    myOrder.length = 0;
-    paymentForm.reset();
-    renderThankYouMessage(paymentFormData.get('name').trim());
-});
+// paymentForm.addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     const paymentFormData = new FormData(paymentForm);
+//     console.log(paymentFormData.get('card-number'));
+//     paymentModalEl.style.display = 'none';
+//     orderEl.innerHTML = '';
+//     myOrder.length = 0;
+//     paymentForm.reset();
+//     renderThankYouMessage(paymentFormData.get('name').trim());
+// });
 
-function renderThankYouMessage(name) {
-    return (
-        <p className="thank-you-message">Thanks, {name}! Your order is on its way!</p>
-    );
-    /*
-    const thankYouMessage = document.createElement('p');
-    thankYouMessage.classList.add('thank-you-message');
-    thankYouMessage.textContent = `Thanks, ${name}! Your order is on its way!`;
-    thankYouMessageContainer.appendChild(thankYouMessage);
-    thankYouMessageContainer.style.display = 'block';
-    */
-}
+// function renderThankYouMessage(name) {
+    
+//     return (
+//         <p className="thank-you-message">Thanks, {name}! Your order is on its way!</p>
+//     );
+    
+//     const thankYouMessage = document.createElement('p');
+//     thankYouMessage.classList.add('thank-you-message');
+//     thankYouMessage.textContent = `Thanks, ${name}! Your order is on its way!`;
+//     thankYouMessageContainer.appendChild(thankYouMessage);
+//     thankYouMessageContainer.style.display = 'block';
+   
+// }
 
 function addItem(itemId, orderArr) {
     orderArr.push(Number(itemId));
