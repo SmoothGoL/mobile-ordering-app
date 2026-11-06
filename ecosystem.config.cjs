@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'my-app',
+      name: 'mobile-ordering-app',
       script: 'npm',
       args: 'run preview',
       env: {
