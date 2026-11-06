@@ -1,9 +1,11 @@
+const packageJson = require('./package.json');
+
 module.exports = {
   apps: [
     {
       name: 'mobile-ordering-app',
-      script: 'npm',
-      args: 'run preview',
+      script: './server.js',
+      args: 'preview',
       env: {
         NODE_ENV: 'production',
       },
