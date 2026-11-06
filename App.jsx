@@ -6,11 +6,10 @@ import MenuItems from './components/MenuItems';
 import OrderedItems from './components/OrderedItems';
 
 export default function App() {
-    const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
-    const [isThankYouMessageVisible, setIsThankYouMessageVisible] = useState(false);
+    const [appStatus, setAppStatus] = useState('browsing'); 
+    // Possible statuses: 'browsing', 'ordering', 'paying', 'success'
     const [userName, setUserName] = useState(null);
     const [orderArr, setOrderArr] = useState([]);
-    const [hasAddedFirstOrderItem, setHasAddedFirstOrderItem] = useState(false);
 
     return (
         <>
@@ -21,24 +20,21 @@ export default function App() {
             <main>
                 <MenuItems 
                     setOrderArr={setOrderArr} 
-                    setHasAddedFirstOrderItem={setHasAddedFirstOrderItem} 
-                    hasAddedFirstOrderItem={hasAddedFirstOrderItem}
-                    setIsThankYouMessageVisible={setIsThankYouMessageVisible}
-                    isThankYouMessageVisible={isThankYouMessageVisible}
+                    appStatus={appStatus}
+                    setAppStatus={setAppStatus}
                 />
-                {hasAddedFirstOrderItem && !isThankYouMessageVisible && 
+                {(appStatus === 'ordering' || appStatus === 'paying') && 
                     <OrderedItems 
                         setOrderArr={setOrderArr} 
                         orderArr={orderArr} 
-                        setIsPaymentModalVisible={setIsPaymentModalVisible}
+                        setAppStatus={setAppStatus}
                     />
                 }
-                {orderArr.length === 0 && isThankYouMessageVisible && <ThankYouMessage userName={userName} />}
+                {appStatus === 'success' && <ThankYouMessage userName={userName} />}
             </main>
-            {isPaymentModalVisible && 
+            {appStatus === 'paying' && 
                 <PaymentModal 
-                    setIsPaymentModalVisible={setIsPaymentModalVisible} 
-                    setIsThankYouMessageVisible={setIsThankYouMessageVisible}
+                    setAppStatus={setAppStatus}
                     setUserName={setUserName}
                     setOrderArr={setOrderArr}
                 />

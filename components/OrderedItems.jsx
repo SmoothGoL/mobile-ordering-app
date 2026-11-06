@@ -9,7 +9,7 @@ export default function OrderedItems(props) {
     }
 
     function showPaymentModal() {
-        props.setIsPaymentModalVisible(true);
+        props.setAppStatus('paying')
     }
 
     function getTotalPrice() {
