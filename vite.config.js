@@ -9,5 +9,9 @@ export default defineConfig({
   },
   preview: {
     port: 8003, // Port used after building when running `vite preview`
+    allowedHosts: [
+      "mobile-ordering-app.smoothgol.org",
+      "mobile-ordering-app.smoothgol.com",
+    ],
   },
 })
