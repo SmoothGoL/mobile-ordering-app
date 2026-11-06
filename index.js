@@ -25,31 +25,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// paymentForm.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     const paymentFormData = new FormData(paymentForm);
-//     console.log(paymentFormData.get('card-number'));
-//     paymentModalEl.style.display = 'none';
-//     orderEl.innerHTML = '';
-//     myOrder.length = 0;
-//     paymentForm.reset();
-//     renderThankYouMessage(paymentFormData.get('name').trim());
-// });
-
-// function renderThankYouMessage(name) {
-    
-//     return (
-//         <p className="thank-you-message">Thanks, {name}! Your order is on its way!</p>
-//     );
-    
-//     const thankYouMessage = document.createElement('p');
-//     thankYouMessage.classList.add('thank-you-message');
-//     thankYouMessage.textContent = `Thanks, ${name}! Your order is on its way!`;
-//     thankYouMessageContainer.appendChild(thankYouMessage);
-//     thankYouMessageContainer.style.display = 'block';
-   
-// }
-
 function addItem(itemId, orderArr) {
     orderArr.push(Number(itemId));
     renderOrder(orderArr);
@@ -63,24 +38,6 @@ function removeOrderItem(id, orderArr) {
 function renderOrder(orderArr) {
     thankYouMessageContainer.style.display = 'none';
     orderEl.innerHTML = getOrderHtml(orderArr);
-}
-
-function getMenuHtml(menuItems) {
-    let outputHtml = '';
-    menuItems.forEach((menuItem) => {
-        outputHtml += `
-            <section class="menu-item">
-                <span class="dish-icon">${menuItem.emoji}</span>
-                <div class="menu-item-description">
-                    <h3 class="menu-item-title">${menuItem.name}</h3>
-                    <p class="ingredients">${menuItem.ingredients.join(', ')}</p>
-                    <p class="price">$${menuItem.price}</p>
-                </div>
-                <button class="add-btn" data-add-btn="${menuItem.id}"><span class="add-btn-text">+</span></button>
-            </section>
-        `;
-    });
-    return outputHtml;
 }
 
 function getOrderHtml(orderArr) {
