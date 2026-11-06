@@ -1,2 +1,45 @@
+ai-response.json
+*.db
+
+
+# Build output
+dist/
+dist-ssr/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Local environment & secret files
+.env
+.env.local
+.env.*.local
+*.env
+*.local
+
+# Editor & OS artifacts
 .DS_Store
 ._*
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs & debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Optional test coverage & cache
+coverage/
+.turbo/
+.eslintcache

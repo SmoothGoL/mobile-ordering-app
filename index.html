@@ -3,32 +3,13 @@
 
 <head>
     <meta charset="utf-8">
+    <title>Mobile ordering app</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
-    <header>
-        <img class="header-img" src="images/header.png"
-            alt="The restaurant header image with the title, 'Jimmy&apos;s Diner - The best burgers and pizzas in town.'">
-    </header>
-    <main>
-        <section id="menu-items" class="menu-items"></section>
-        <!-- <p id="window-width"></p> -->
-        <section id="order" class="order"></section>
-        <div id="thank-you-message-container" class="thank-you-message-container"></div>
-    </main>
-    <div class="payment-modal" id="payment-modal">
-        <h2 class="modal-title">Enter card details</h2>
-        <form id="payment-form">
-            <input class="modal-input" type="text" name="name" placeholder="Enter your name" required>
-            <input class="modal-input" type="text" name="card-number" placeholder="Enter card number" required>
-            <input class="modal-input" type="text" name="cvv" placeholder="Enter CVV" required>
-            <button id="modal-submit-btn" class="modal-submit-btn" type="submit">Pay</button>
-        </form>
-        <button id="modal-close-btn" class="modal-close-btn">X</button>
-    </div>
-    <script src="index.js" type="module"></script>
+    <div id="root"></div>
+    <script src="main.jsx" type="module"></script>
 </body>
 
 </html>
