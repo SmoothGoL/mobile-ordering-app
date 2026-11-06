@@ -2,8 +2,10 @@ export default function PaymentModal(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        props.setIsPaymentModalVisible(isVisible => !isVisible);
-        props.setIsThankYouMessageVisible(isVisible => !isVisible);
+        const paymentFormData = new FormData(e.currentTarget);
+        props.setUserName(paymentFormData.get('name').trim());
+        props.setIsPaymentModalVisible(prevIsVisible => !prevIsVisible);
+        props.setIsThankYouMessageVisible(prevIsVisible => !prevIsVisible);
     }
 
     function handleClose() {

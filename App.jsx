@@ -4,8 +4,9 @@ import { useState } from 'react';
 import ThankYouMessage from './components/ThankYouMessage'
 
 export default function App() {
-    const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
+    const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(true);
     const [isThankYouMessageVisible, setIsThankYouMessageVisible] = useState(false);
+    const [userName, setUserName] = useState(null);
 
     return (
         <>
@@ -17,12 +18,13 @@ export default function App() {
                 <section id="menu-items" className="menu-items"></section>
                 {/* <p id="window-width"></p> */}
                 <section id="order" className="order"></section>
-                {isThankYouMessageVisible && <ThankYouMessage />}
+                {isThankYouMessageVisible && <ThankYouMessage userName={userName} />}
             </main>
             {isPaymentModalVisible && 
                 <PaymentModal 
                     setIsPaymentModalVisible={setIsPaymentModalVisible} 
                     setIsThankYouMessageVisible={setIsThankYouMessageVisible}
+                    setUserName={setUserName}
                 />
             }
         </>
