@@ -22,7 +22,7 @@ const OrderedItems = memo(function OrderedItems(props) {
     }
 
     const outputHtml = props.orderArr.map(orderItem => {
-        const orderedMenuItem = menuArray.filter(menuItem => menuItem.id === orderItem.itemId)[0];
+        const orderedMenuItem = menuArray.find(menuItem => menuItem.id === orderItem.itemId);
         return (
             <div className="order-item-container" key={orderItem.orderId}>
                 <span className="order-item">{orderedMenuItem.name}</span>
