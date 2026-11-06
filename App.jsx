@@ -10,6 +10,7 @@ export default function App() {
     const [isThankYouMessageVisible, setIsThankYouMessageVisible] = useState(false);
     const [userName, setUserName] = useState(null);
     const [orderArr, setOrderArr] = useState([]);
+    const [hasAddedFirstOrderItem, setHasAddedFirstOrderItem] = useState(false);
 
     return (
         <>
@@ -18,9 +19,19 @@ export default function App() {
                     alt="The restaurant header image with the title, 'Jimmy&apos;s Diner - The best burgers and pizzas in town.'" />
             </header>
             <main>
-                <MenuItems setOrderArr={setOrderArr} />
-                {orderArr.length > 0 && 
-                    <OrderedItems setOrderArr={setOrderArr} orderArr={orderArr} />
+                <MenuItems 
+                    setOrderArr={setOrderArr} 
+                    setHasAddedFirstOrderItem={setHasAddedFirstOrderItem} 
+                    hasAddedFirstOrderItem={hasAddedFirstOrderItem}
+                    setIsThankYouMessageVisible={setIsThankYouMessageVisible}
+                    isThankYouMessageVisible={isThankYouMessageVisible}
+                />
+                {hasAddedFirstOrderItem && !isThankYouMessageVisible && 
+                    <OrderedItems 
+                        setOrderArr={setOrderArr} 
+                        orderArr={orderArr} 
+                        setIsPaymentModalVisible={setIsPaymentModalVisible}
+                    />
                 }
                 {orderArr.length === 0 && isThankYouMessageVisible && <ThankYouMessage userName={userName} />}
             </main>

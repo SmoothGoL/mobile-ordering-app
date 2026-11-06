@@ -8,6 +8,10 @@ export default function OrderedItems(props) {
         });
     }
 
+    function showPaymentModal() {
+        props.setIsPaymentModalVisible(true);
+    }
+
     function getTotalPrice() {
         let totalPrice = 0;
         props.orderArr.forEach(orderItem => {
@@ -39,6 +43,7 @@ export default function OrderedItems(props) {
             <button
                 id="complete-order-btn"
                 className="complete-order-btn"
+                onClick={showPaymentModal}
                 disabled={props.orderArr.length === 0}
             >
                 Complete order

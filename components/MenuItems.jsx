@@ -8,6 +8,12 @@ export default function MenuItems(props) {
         const newItemId = parseInt(e.currentTarget.dataset.itemId);
         props.setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, orderId: currentOrderId}]);
         setCurrentOrderId(prevOrderId => prevOrderId + 1);
+        if (!props.hasAddedFirstOrderItem) {
+            props.setHasAddedFirstOrderItem(true);
+        }
+        if (props.isThankYouMessageVisible) {
+            props.setIsThankYouMessageVisible(false);
+        }
     }
 
     const outputHtml = menuArray.map(menuItem => {
