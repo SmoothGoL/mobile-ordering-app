@@ -38,11 +38,16 @@ paymentForm.addEventListener('submit', (e) => {
 });
 
 function renderThankYouMessage(name) {
+    return (
+        <p className="thank-you-message">Thanks, {name}! Your order is on its way!</p>
+    );
+    /*
     const thankYouMessage = document.createElement('p');
     thankYouMessage.classList.add('thank-you-message');
     thankYouMessage.textContent = `Thanks, ${name}! Your order is on its way!`;
     thankYouMessageContainer.appendChild(thankYouMessage);
     thankYouMessageContainer.style.display = 'block';
+    */
 }
 
 function addItem(itemId, orderArr) {

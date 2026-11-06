@@ -1,6 +1,10 @@
-import headerImage from './src/assets/images/header.png'
+import headerImage from './src/assets/images/header.png';
+import PaymentModal from './components/PaymentModal';
+import { useState } from 'react';
 
 export default function App() {
+    const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
+
     return (
         <>
             <header>
@@ -11,18 +15,11 @@ export default function App() {
                 <section id="menu-items" className="menu-items"></section>
                 {/* <p id="window-width"></p> */}
                 <section id="order" className="order"></section>
-                <div id="thank-you-message-container" className="thank-you-message-container"></div>
+                <div id="thank-you-message-container" className="thank-you-message-container">
+                    <p className="thank-you-message">Thanks, {name}! Your order is on its way!</p>
+                </div>
             </main>
-            <div className="payment-modal" id="payment-modal">
-                <h2 className="modal-title">Enter card details</h2>
-                <form id="payment-form">
-                    <input className="modal-input" type="text" name="name" placeholder="Enter your name" required />
-                    <input className="modal-input" type="text" name="card-number" placeholder="Enter card number" required />
-                    <input className="modal-input" type="text" name="cvv" placeholder="Enter CVV" required />
-                    <button id="modal-submit-btn" className="modal-submit-btn" type="submit">Pay</button>
-                </form>
-                <button id="modal-close-btn" className="modal-close-btn">X</button>
-            </div>
+            {isPaymentModalVisible && <PaymentModal />}
         </>
     );
 }

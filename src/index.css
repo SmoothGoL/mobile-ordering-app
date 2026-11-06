@@ -174,7 +174,6 @@ main {
     background: #fff;
     border-radius: 4px;
     padding: 0 24px 30px 24px;
-    display: none;
 }
 
 .modal-close-btn {
@@ -237,7 +236,6 @@ main {
     color: #065F46;
     padding: 50px 50px;
     margin-top: 45px;
-    display: none;
 }
 
 .thank-you-message {
