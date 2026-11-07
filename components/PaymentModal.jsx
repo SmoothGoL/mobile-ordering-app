@@ -8,6 +8,7 @@ const PaymentModal = memo(function PaymentModal(props) {
         props.setUserName(paymentFormData.get('name').trim());
         props.setOrderArr([]);
         props.setAppStatus('success')
+        e.currentTarget.reset();
     }
 
     function handleClose() {
