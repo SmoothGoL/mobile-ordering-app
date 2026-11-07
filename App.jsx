@@ -32,7 +32,7 @@ export default function App() {
                 setAppStatus={setAppStatus}
                 setUserName={setUserName}
                 setOrderArr={setOrderArr}
-                isVisible={appStatus === 'paying' ? true : false}
+                isVisible={appStatus === 'paying'}
             />
         </>
     );

@@ -1,6 +1,7 @@
 import { menuArray } from '../src/assets/data';
 import { memo } from 'react';
 
+
 const OrderedItems = memo(function OrderedItems(props) {
     function removeOrderItem(e) {
         const orderIdToExclude = parseInt(e.currentTarget.dataset.removeOrderId);
@@ -14,15 +15,14 @@ const OrderedItems = memo(function OrderedItems(props) {
     }
 
     function getTotalPrice() {
-        let totalPrice = 0;
-        props.orderArr.forEach(orderItem => {
-            totalPrice += menuArray[orderItem.itemId].price;
-        });
-        return totalPrice;
+        return props.orderArr.reduce((total, orderItem) => {
+            // Using the index lookup you already had, or use .find() if you changed it
+            return total + menuArray[orderItem.itemId].price; 
+        }, 0);
     }
 
     const outputHtml = props.orderArr.map(orderItem => {
-        const orderedMenuItem = menuArray.find(menuItem => menuItem.id === orderItem.itemId);
+        const orderedMenuItem = menuArray[orderItem.itemId];
         return (
             <div className="order-item-container" key={orderItem.orderId}>
                 <span className="order-item">{orderedMenuItem.name}</span>
