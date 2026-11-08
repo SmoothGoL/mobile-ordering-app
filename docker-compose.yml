@@ -1,0 +1,6 @@
+services:
+  mobile-ordering-app:
+    image: smoothgol/mobile-ordering-app:latest
+    container_name: mobile-ordering-app
+    ports:
+      - "8003:80"
