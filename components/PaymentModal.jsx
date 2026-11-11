@@ -2,13 +2,10 @@ import { memo } from 'react';
 
 const PaymentModal = memo(function PaymentModal(props) {
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        const paymentFormData = new FormData(e.currentTarget);
+    function handleSubmit(paymentFormData) {
         props.setUserName(paymentFormData.get('name').trim());
         props.setOrderArr([]);
         props.setAppStatus('success')
-        e.currentTarget.reset();
     }
 
     function handleClose() {
@@ -18,7 +15,7 @@ const PaymentModal = memo(function PaymentModal(props) {
     return (
         <div className="payment-modal" style={{display: (props.isVisible ? 'block' : 'none')}} id="payment-modal">
             <h2 className="modal-title">Enter card details</h2>
-            <form id="payment-form" onSubmit={handleSubmit}>
+            <form id="payment-form" action={handleSubmit}>
                 <input className="modal-input" type="text" name="name" placeholder="Enter your name" required />
                 <input className="modal-input" type="text" name="card-number" placeholder="Enter card number" required />
                 <input className="modal-input" type="text" name="cvv" placeholder="Enter CVV" required />
