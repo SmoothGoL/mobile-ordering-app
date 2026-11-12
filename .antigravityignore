@@ -1,0 +1,11 @@
+copy.sh
+.git/
+Dockerfile
+vite.config.js
+README.md
+build.sh
+package-lock.json
+.gitattributes
+ecosystem.config.cjs
+docker-compose.yml
+eslint.config.js
