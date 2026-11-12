@@ -1,13 +1,6 @@
 import { menuArray } from '../assets/data';
 
 export default function OrderedItems(props) {
-    function onRemoveItem(uuid) {
-        const idToExclude = uuid;
-        props.setOrderArr(prevOrderArr => {
-            return prevOrderArr.filter(orderItem => orderItem.uuid !== idToExclude);
-        });
-    }
-
     function showPaymentModal() {
         props.setAppStatus('paying')
     }
@@ -24,7 +17,7 @@ export default function OrderedItems(props) {
         return (
             <div className="order-item-container" key={orderItem.uuid}>
                 <span className="order-item">{orderedMenuItem.name}</span>
-                <button className="remove-btn" onClick={() => onRemoveItem(orderItem.uuid)}>remove</button>
+                <button className="remove-btn" onClick={() => props.onRemoveItem(orderItem.uuid)}>remove</button>
                 <span className="order-price">${orderedMenuItem.price}</span>
             </div>
         );

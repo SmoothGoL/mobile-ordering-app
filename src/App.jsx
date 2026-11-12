@@ -16,6 +16,13 @@ export default function App() {
         setAppStatus('ordering');
     }
 
+    function handleRemoveItem(uuid) {
+        const idToExclude = uuid;
+        setOrderArr(prevOrderArr => {
+            return prevOrderArr.filter(orderItem => orderItem.uuid !== idToExclude);
+        });
+    }
+
     return (
         <>
             <Header />
@@ -25,9 +32,8 @@ export default function App() {
                 />
                 {(appStatus === 'ordering' || appStatus === 'paying') && 
                     <OrderedItems 
-                        setOrderArr={setOrderArr} 
-                        orderArr={orderArr} 
-                        setAppStatus={setAppStatus}
+                        orderArr={orderArr}
+                        onRemoveItem={handleRemoveItem}
                     />
                 }
                 {appStatus === 'success' && <ThankYouMessage userName={userName} />}
