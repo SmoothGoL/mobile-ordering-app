@@ -16,11 +16,19 @@ const PaymentModal = memo(function PaymentModal(props) {
         <div className="payment-modal" style={{display: (props.isVisible ? 'block' : 'none')}} id="payment-modal">
             <h2 className="modal-title">Enter card details</h2>
             <form id="payment-form" action={completePayment}>
-                <input className="modal-input" type="text" name="name" placeholder="Enter your name" required />
+                <input 
+                    className="modal-input" 
+                    type="text" 
+                    name="name" 
+                    aria-label="Full name"
+                    placeholder="Enter your name" 
+                    required 
+                />
                 <input 
                     className="modal-input" 
                     type="text" 
                     name="card-number" 
+                    aria-label="Card number"
                     inputMode="numeric"
                     pattern="[0-9]*"
                     placeholder="Enter card number" 
@@ -29,6 +37,7 @@ const PaymentModal = memo(function PaymentModal(props) {
                 <input 
                     className="modal-input" 
                     type="text" name="cvv" 
+                    aria-label="CVV"
                     inputMode="numeric"
                     pattern="[0-9]*"
                     placeholder="Enter CVV" 
