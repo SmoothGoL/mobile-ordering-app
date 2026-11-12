@@ -2,8 +2,7 @@ import { menuArray } from '../src/assets/data';
 import { memo } from 'react';
 
 const MenuItems =  memo(function MenuItems(props) {
-    function addItem(e) {
-        const newItemId = parseInt(e.currentTarget.dataset.itemId);
+    function handleAddItem(newItemId) {
         props.setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, uuid: crypto.randomUUID()}]);
         props.setAppStatus('ordering')
     }
@@ -17,7 +16,7 @@ const MenuItems =  memo(function MenuItems(props) {
                     <p className="ingredients">{menuItem.ingredients.join(', ')}</p>
                     <p className="price">${menuItem.price}</p>
                 </div>
-                <button className="add-btn" data-item-id={menuItem.id} onClick={addItem}><span className="add-btn-text">+</span></button>
+                <button className="add-btn" onClick={() => handleAddItem(menuItem.id)}><span className="add-btn-text">+</span></button>
             </section>
         );
     });
