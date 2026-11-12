@@ -1,13 +1,13 @@
-export default function MenuItem(props) {
+export default function MenuItem({ item, onAddItem }) {
     return (
-        <section className="menu-item" key={props.item.id}>
-            <span className="dish-icon">{props.item.emoji}</span>
+        <section className="menu-item">
+            <span className="dish-icon">{item.emoji}</span>
             <div className="menu-item-description">
-                <h3 className="menu-item-title">{props.item.name}</h3>
-                <p className="ingredients">{props.item.ingredients.join(', ')}</p>
-                <p className="price">${props.item.price}</p>
+                <h3 className="menu-item-title">{item.name}</h3>
+                <p className="ingredients">{item.ingredients.join(', ')}</p>
+                <p className="price">${item.price}</p>
             </div>
-            <button className="add-btn" onClick={() => props.onAddItem(props.item.id)}><span className="add-btn-text">+</span></button>
+            <button className="add-btn" onClick={() => onAddItem(item.id)}><span className="add-btn-text">+</span></button>
         </section>
     );
 }

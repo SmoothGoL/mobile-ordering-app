@@ -1,8 +1,8 @@
-export default function PaymentModal(props) {
+export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) {
     return (
-        <div className="payment-modal" style={{display: (props.isVisible ? 'block' : 'none')}} id="payment-modal">
+        <div className="payment-modal" style={{display: (isVisible ? 'block' : 'none')}} id="payment-modal">
             <h2 className="modal-title">Enter card details</h2>
-            <form id="payment-form" action={props.onPaymentComplete}>
+            <form id="payment-form" action={onPaymentComplete}>
                 <input 
                     className="modal-input" 
                     type="text" 
@@ -32,7 +32,7 @@ export default function PaymentModal(props) {
                 />
                 <button id="modal-submit-btn" className="modal-submit-btn" type="submit">Pay</button>
             </form>
-            <button id="modal-close-btn" className="modal-close-btn" onClick={props.onClose}>X</button>
+            <button id="modal-close-btn" className="modal-close-btn" onClick={onClose}>X</button>
         </div>
     );
 }

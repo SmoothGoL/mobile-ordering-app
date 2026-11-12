@@ -1,7 +1,7 @@
 import { menuArray } from '../assets/data';
 import MenuItem from './MenuItem';
 
-export default function MenuItems(props) {
+export default function MenuItems({ onAddItem }) {
     return (
         <section id="menu-items" className="menu-items">
             {
@@ -10,7 +10,7 @@ export default function MenuItems(props) {
                         <MenuItem 
                             key={menuItem.id}
                             item={menuItem}
-                            onAddItem={props.onAddItem}
+                            onAddItem={onAddItem}
                         />
                     );
                 })
