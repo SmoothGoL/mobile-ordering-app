@@ -1,60 +1,60 @@
 import { menuArray } from '../assets/data';
 
 export default function OrderedItems({ orderArr, onAddItem, onDecrementItem, onRemoveItem, showPaymentModal }) {
-    function getTotalPrice() {
-        return orderArr.reduce((total, orderItem) => {
-            const menuItem = menuArray.find(item => item.id === orderItem.itemId);
-            return total + menuItem.price * orderItem.quantity;
-        }, 0);
-    }
-
-    const outputHtml = orderArr.map(orderItem => {
-        const orderedMenuItem = menuArray.find(menuItem => menuItem.id === orderItem.itemId);
-        return (
-            <div className="order-item-container" key={orderItem.itemId}>
-                <span className="order-item">
-                    {orderedMenuItem.name} <span className="order-quantity">x{orderItem.quantity}</span>
-                </span>
-                <div className="quantity-controls">
-                    <button
-                        className="qty-btn"
-                        aria-label={`Decrease ${orderedMenuItem.name} quantity`}
-                        onClick={() => onDecrementItem(orderItem.itemId)}
-                    >
-                        -
-                    </button>
-                    <button
-                        className="qty-btn"
-                        aria-label={`Increase ${orderedMenuItem.name} quantity`}
-                        onClick={() => onAddItem(orderItem.itemId)}
-                    >
-                        +
-                    </button>
-                </div>
-                <button className="remove-btn" onClick={() => onRemoveItem(orderItem.itemId)}>remove</button>
-                <span className="order-price">${orderedMenuItem.price * orderItem.quantity}</span>
-            </div>
-        );
+    const orderedItems = orderArr.map(orderItem => {
+        const menuItem = menuArray.find(item => item.id === orderItem.itemId);
+        return {
+            ...menuItem,
+            quantity: orderItem.quantity,
+            subtotal: menuItem.price * orderItem.quantity,
+        };
     });
+
+    const totalPrice = orderedItems.reduce((total, item) => total + item.subtotal, 0);
+    const hasItems = orderedItems.length > 0;
 
     return (
         <section id="order" className="order">
-            {(orderArr.length > 0) &&
+            {hasItems &&
                 <>
                     <h2 className="order-title">Your order</h2>
-                    {outputHtml}
+                    {orderedItems.map(item => (
+                        <div className="order-item-container" key={item.id}>
+                            <span className="order-item">
+                                {item.name} <span className="order-quantity">x{item.quantity}</span>
+                            </span>
+                            <div className="quantity-controls">
+                                <button
+                                    className="qty-btn"
+                                    aria-label={`Decrease ${item.name} quantity`}
+                                    onClick={() => onDecrementItem(item.id)}
+                                >
+                                    -
+                                </button>
+                                <button
+                                    className="qty-btn"
+                                    aria-label={`Increase ${item.name} quantity`}
+                                    onClick={() => onAddItem(item.id)}
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button className="remove-btn" onClick={() => onRemoveItem(item.id)}>remove</button>
+                            <span className="order-price">${item.subtotal}</span>
+                        </div>
+                    ))}
                     <hr className="order-hr" />
                 </>
             }
-            <div className="total-price-container" style={{marginTop: (orderArr.length > 0 ? '0' : '30px')}}>
+            <div className="total-price-container" style={{marginTop: (hasItems ? '0' : '30px')}}>
                 <span className="total-price">Total price:</span>
-                <span className="order-price">${getTotalPrice()}</span>
+                <span className="order-price">${totalPrice}</span>
             </div>
             <button
                 id="complete-order-btn"
                 className="complete-order-btn"
                 onClick={showPaymentModal}
-                disabled={orderArr.length === 0}
+                disabled={!hasItems}
             >
                 Complete order
             </button>
