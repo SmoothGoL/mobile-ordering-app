@@ -201,9 +201,15 @@ main {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    margin: 0;
+    border: none;
     background: #fff;
     border-radius: 4px;
     padding: 0 24px 30px 24px;
+}
+
+.payment-modal::backdrop {
+    background: rgba(0, 0, 0, 0.4);
 }
 
 .modal-close-btn {
