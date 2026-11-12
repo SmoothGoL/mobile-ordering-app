@@ -17,7 +17,7 @@ const OrderedItems = memo(function OrderedItems(props) {
     function getTotalPrice() {
         return props.orderArr.reduce((total, orderItem) => {
             // Using the index lookup you already had, or use .find() if you changed it
-            return total + menuArray[orderItem.itemId].price; 
+            return total + menuArray.find(item => item.id === orderItem.itemId).price; 
         }, 0);
     }
 
