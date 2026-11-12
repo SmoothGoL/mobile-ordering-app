@@ -1,4 +1,4 @@
-import { menuArray } from '../src/assets/data';
+import { menuArray } from '../assets/data';
 import { memo } from 'react';
 
 

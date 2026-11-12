@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import headerImage from '../src/assets/images/header.png';
+import headerImage from '../assets/images/header.png';
 
 const Header = memo(function Header() {
     return (
