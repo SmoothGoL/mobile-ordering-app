@@ -11,13 +11,17 @@ export default function App() {
     const [userName, setUserName] = useState(null);
     const [orderArr, setOrderArr] = useState([]);
 
+    function handleAddItem(newItemId) {
+        setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, uuid: crypto.randomUUID()}]);
+        setAppStatus('ordering');
+    }
+
     return (
         <>
             <Header />
             <main>
                 <MenuItems 
-                    setOrderArr={setOrderArr}
-                    setAppStatus={setAppStatus}
+                    onAddItem={handleAddItem}
                 />
                 {(appStatus === 'ordering' || appStatus === 'paying') && 
                     <OrderedItems 

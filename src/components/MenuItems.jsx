@@ -2,11 +2,6 @@ import { menuArray } from '../assets/data';
 import MenuItem from './MenuItem';
 
 export default function MenuItems(props) {
-    function handleAddItem(newItemId) {
-        props.setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, uuid: crypto.randomUUID()}]);
-        props.setAppStatus('ordering')
-    }
-
     return (
         <section id="menu-items" className="menu-items">
             {
@@ -15,7 +10,7 @@ export default function MenuItems(props) {
                         <MenuItem 
                             key={menuItem.id}
                             item={menuItem}
-                            onAddItem={handleAddItem}
+                            onAddItem={props.onAddItem}
                         />
                     );
                 })
