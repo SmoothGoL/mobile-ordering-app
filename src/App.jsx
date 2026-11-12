@@ -12,15 +12,36 @@ export default function App() {
     const [orderArr, setOrderArr] = useState([]);
 
     function handleAddItem(newItemId) {
-        setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, uuid: crypto.randomUUID()}]);
+        setOrderArr(prevOrderArr => {
+            const existingItem = prevOrderArr.find(orderItem => orderItem.itemId === newItemId);
+            if (existingItem) {
+                return prevOrderArr.map(orderItem =>
+                    orderItem.itemId === newItemId
+                        ? { ...orderItem, quantity: orderItem.quantity + 1 }
+                        : orderItem
+                );
+            }
+            return [...prevOrderArr, { itemId: newItemId, quantity: 1 }];
+        });
         setAppStatus('ordering');
     }
 
-    function handleRemoveItem(uuid) {
-        const idToExclude = uuid;
-        setOrderArr(prevOrderArr => {
-            return prevOrderArr.filter(orderItem => orderItem.uuid !== idToExclude);
-        });
+    function handleDecrementItem(itemId) {
+        setOrderArr(prevOrderArr =>
+            prevOrderArr
+                .map(orderItem =>
+                    orderItem.itemId === itemId
+                        ? { ...orderItem, quantity: orderItem.quantity - 1 }
+                        : orderItem
+                )
+                .filter(orderItem => orderItem.quantity > 0)
+        );
+    }
+
+    function handleRemoveItem(itemId) {
+        setOrderArr(prevOrderArr =>
+            prevOrderArr.filter(orderItem => orderItem.itemId !== itemId)
+        );
     }
 
     function completePayment(paymentFormData) {
@@ -47,6 +68,8 @@ export default function App() {
                 {(appStatus === 'ordering' || appStatus === 'paying') && 
                     <OrderedItems 
                         orderArr={orderArr}
+                        onAddItem={handleAddItem}
+                        onDecrementItem={handleDecrementItem}
                         onRemoveItem={handleRemoveItem}
                         showPaymentModal={showPaymentModal}
                     />
