@@ -1,5 +1,6 @@
 import { menuArray } from '../assets/data';
 import { memo } from 'react';
+import MenuItem from './MenuItem';
 
 const MenuItems =  memo(function MenuItems(props) {
     function handleAddItem(newItemId) {
@@ -7,23 +8,19 @@ const MenuItems =  memo(function MenuItems(props) {
         props.setAppStatus('ordering')
     }
 
-    const outputHtml = menuArray.map(menuItem => {
-        return (
-            <section className="menu-item" key={menuItem.id}>
-                <span className="dish-icon">{menuItem.emoji}</span>
-                <div className="menu-item-description">
-                    <h3 className="menu-item-title">{menuItem.name}</h3>
-                    <p className="ingredients">{menuItem.ingredients.join(', ')}</p>
-                    <p className="price">${menuItem.price}</p>
-                </div>
-                <button className="add-btn" onClick={() => handleAddItem(menuItem.id)}><span className="add-btn-text">+</span></button>
-            </section>
-        );
-    });
-
     return (
         <section id="menu-items" className="menu-items">
-            {outputHtml}
+            {
+                menuArray.map(menuItem => {
+                    return (
+                        <MenuItem 
+                            key={menuItem.id}
+                            item={menuItem}
+                            onAddItem={handleAddItem}
+                        />
+                    );
+                })
+            }
         </section>
     );
 });
