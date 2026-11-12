@@ -34,10 +34,14 @@ const OrderedItems = memo(function OrderedItems(props) {
 
     return (
         <section id="order" className="order">
-            <h2 className="order-title">Your order</h2>
-            {outputHtml}
-            <hr className="order-hr" />
-            <div className="total-price-container">
+            {(props.orderArr.length > 0) &&
+                <>
+                    <h2 className="order-title">Your order</h2>
+                    {outputHtml}
+                    <hr className="order-hr" />
+                </>
+            }
+            <div className="total-price-container" style={{marginTop: (props.orderArr.length > 0 ? '0' : '30px')}}>
                 <span className="total-price">Total price:</span>
                 <span className="order-price">${getTotalPrice()}</span>
             </div>
