@@ -1,20 +1,38 @@
 import { menuArray } from '../assets/data';
 
-export default function OrderedItems({ orderArr, onRemoveItem, showPaymentModal}) {
+export default function OrderedItems({ orderArr, onAddItem, onDecrementItem, onRemoveItem, showPaymentModal }) {
     function getTotalPrice() {
         return orderArr.reduce((total, orderItem) => {
-            // Using the index lookup you already had, or use .find() if you changed it
-            return total + menuArray.find(item => item.id === orderItem.itemId).price; 
+            const menuItem = menuArray.find(item => item.id === orderItem.itemId);
+            return total + menuItem.price * orderItem.quantity;
         }, 0);
     }
 
     const outputHtml = orderArr.map(orderItem => {
         const orderedMenuItem = menuArray.find(menuItem => menuItem.id === orderItem.itemId);
         return (
-            <div className="order-item-container" key={orderItem.uuid}>
-                <span className="order-item">{orderedMenuItem.name}</span>
-                <button className="remove-btn" onClick={() => onRemoveItem(orderItem.uuid)}>remove</button>
-                <span className="order-price">${orderedMenuItem.price}</span>
+            <div className="order-item-container" key={orderItem.itemId}>
+                <span className="order-item">
+                    {orderedMenuItem.name} <span className="order-quantity">x{orderItem.quantity}</span>
+                </span>
+                <div className="quantity-controls">
+                    <button
+                        className="qty-btn"
+                        aria-label={`Decrease ${orderedMenuItem.name} quantity`}
+                        onClick={() => onDecrementItem(orderItem.itemId)}
+                    >
+                        -
+                    </button>
+                    <button
+                        className="qty-btn"
+                        aria-label={`Increase ${orderedMenuItem.name} quantity`}
+                        onClick={() => onAddItem(orderItem.itemId)}
+                    >
+                        +
+                    </button>
+                </div>
+                <button className="remove-btn" onClick={() => onRemoveItem(orderItem.itemId)}>remove</button>
+                <span className="order-price">${orderedMenuItem.price * orderItem.quantity}</span>
             </div>
         );
     });

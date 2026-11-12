@@ -111,11 +111,41 @@ main {
 
 .order-item-container {
     display: flex;
+    align-items: center;
+    gap: 8px;
     margin-bottom: 10px;
 }
 
 .order-item {
     font-size: 28px;
+}
+
+.order-quantity {
+    font-size: 20px;
+    color: #777;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.qty-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #dedede;
+    background: #fff;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-btn:hover {
+    border-color: #3c3c3c;
 }
 
 .remove-btn {
