@@ -1,8 +1,7 @@
 import { menuArray } from '../assets/data';
-import { memo } from 'react';
 import MenuItem from './MenuItem';
 
-const MenuItems =  memo(function MenuItems(props) {
+export default function MenuItems(props) {
     function handleAddItem(newItemId) {
         props.setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, uuid: crypto.randomUUID()}]);
         props.setAppStatus('ordering')
@@ -23,6 +22,4 @@ const MenuItems =  memo(function MenuItems(props) {
             }
         </section>
     );
-});
-
-export default MenuItems;
+}

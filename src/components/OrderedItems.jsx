@@ -1,8 +1,6 @@
 import { menuArray } from '../assets/data';
-import { memo } from 'react';
 
-
-const OrderedItems = memo(function OrderedItems(props) {
+export default function OrderedItems(props) {
     function onRemoveItem(uuid) {
         const idToExclude = uuid;
         props.setOrderArr(prevOrderArr => {
@@ -55,6 +53,4 @@ const OrderedItems = memo(function OrderedItems(props) {
             </button>
         </section>
     );
-});
-
-export default OrderedItems;
+}

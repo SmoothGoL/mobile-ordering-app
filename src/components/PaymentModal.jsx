@@ -1,6 +1,4 @@
-import { memo } from 'react';
-
-const PaymentModal = memo(function PaymentModal(props) {
+export default function PaymentModal(props) {
 
     function completePayment(paymentFormData) {
         props.setUserName(paymentFormData.get('name').trim());
@@ -48,6 +46,4 @@ const PaymentModal = memo(function PaymentModal(props) {
             <button id="modal-close-btn" className="modal-close-btn" onClick={handleClose}>X</button>
         </div>
     );
-});
-
-export default PaymentModal;
+}
