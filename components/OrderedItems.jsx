@@ -4,9 +4,9 @@ import { memo } from 'react';
 
 const OrderedItems = memo(function OrderedItems(props) {
     function removeOrderItem(e) {
-        const orderIdToExclude = parseInt(e.currentTarget.dataset.removeOrderId);
+        const idToExclude = e.currentTarget.dataset.removeId;
         props.setOrderArr(prevOrderArr => {
-            return prevOrderArr.filter(orderItem => orderItem.orderId !== orderIdToExclude);
+            return prevOrderArr.filter(orderItem => orderItem.uuid !== idToExclude);
         });
     }
 
@@ -24,9 +24,9 @@ const OrderedItems = memo(function OrderedItems(props) {
     const outputHtml = props.orderArr.map(orderItem => {
         const orderedMenuItem = menuArray.find(menuItem => menuItem.id === orderItem.itemId);
         return (
-            <div className="order-item-container" key={orderItem.orderId}>
+            <div className="order-item-container" key={orderItem.uuid}>
                 <span className="order-item">{orderedMenuItem.name}</span>
-                <button className="remove-btn" data-remove-order-id={orderItem.orderId} onClick={removeOrderItem}>remove</button>
+                <button className="remove-btn" data-remove-id={orderItem.uuid} onClick={removeOrderItem}>remove</button>
                 <span className="order-price">${orderedMenuItem.price}</span>
             </div>
         );

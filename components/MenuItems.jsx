@@ -1,13 +1,10 @@
 import { menuArray } from '../src/assets/data';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 
 const MenuItems =  memo(function MenuItems(props) {
-    const [currentOrderId, setCurrentOrderId] = useState(0);
-
     function addItem(e) {
         const newItemId = parseInt(e.currentTarget.dataset.itemId);
-        props.setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, orderId: currentOrderId}]);
-        setCurrentOrderId(prevOrderId => prevOrderId + 1);
+        props.setOrderArr(prevOrderArr => [...prevOrderArr, {itemId: newItemId, uuid: crypto.randomUUID()}]);
         props.setAppStatus('ordering')
     }
 
