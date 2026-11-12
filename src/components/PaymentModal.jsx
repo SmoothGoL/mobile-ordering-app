@@ -1,19 +1,8 @@
 export default function PaymentModal(props) {
-
-    function completePayment(paymentFormData) {
-        props.setUserName(paymentFormData.get('name').trim());
-        props.setOrderArr([]);
-        props.setAppStatus('success')
-    }
-
-    function handleClose() {
-        props.setAppStatus('ordering')
-    }
-
     return (
         <div className="payment-modal" style={{display: (props.isVisible ? 'block' : 'none')}} id="payment-modal">
             <h2 className="modal-title">Enter card details</h2>
-            <form id="payment-form" action={completePayment}>
+            <form id="payment-form" action={props.onPaymentComplete}>
                 <input 
                     className="modal-input" 
                     type="text" 
@@ -43,7 +32,7 @@ export default function PaymentModal(props) {
                 />
                 <button id="modal-submit-btn" className="modal-submit-btn" type="submit">Pay</button>
             </form>
-            <button id="modal-close-btn" className="modal-close-btn" onClick={handleClose}>X</button>
+            <button id="modal-close-btn" className="modal-close-btn" onClick={props.onClose}>X</button>
         </div>
     );
 }

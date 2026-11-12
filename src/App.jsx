@@ -23,6 +23,20 @@ export default function App() {
         });
     }
 
+    function completePayment(paymentFormData) {
+        setUserName(paymentFormData.get('name').trim());
+        setOrderArr([]);
+        setAppStatus('success')
+    }
+
+    function handleClosePaymentModal() {
+        setAppStatus('ordering')
+    }
+
+    function showPaymentModal() {
+        setAppStatus('paying')
+    }
+
     return (
         <>
             <Header />
@@ -34,14 +48,14 @@ export default function App() {
                     <OrderedItems 
                         orderArr={orderArr}
                         onRemoveItem={handleRemoveItem}
+                        showPaymentModal={showPaymentModal}
                     />
                 }
                 {appStatus === 'success' && <ThankYouMessage userName={userName} />}
             </main>
             <PaymentModal 
-                setAppStatus={setAppStatus}
-                setUserName={setUserName}
-                setOrderArr={setOrderArr}
+                onPaymentComplete={completePayment}
+                onClose={handleClosePaymentModal}
                 isVisible={appStatus === 'paying'}
             />
         </>

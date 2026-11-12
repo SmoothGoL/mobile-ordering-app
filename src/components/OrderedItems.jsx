@@ -1,10 +1,6 @@
 import { menuArray } from '../assets/data';
 
 export default function OrderedItems(props) {
-    function showPaymentModal() {
-        props.setAppStatus('paying')
-    }
-
     function getTotalPrice() {
         return props.orderArr.reduce((total, orderItem) => {
             // Using the index lookup you already had, or use .find() if you changed it
@@ -39,7 +35,7 @@ export default function OrderedItems(props) {
             <button
                 id="complete-order-btn"
                 className="complete-order-btn"
-                onClick={showPaymentModal}
+                onClick={props.showPaymentModal}
                 disabled={props.orderArr.length === 0}
             >
                 Complete order
