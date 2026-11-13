@@ -195,6 +195,16 @@ describe('Mobile ordering app user flows', () => {
         await expect.element(page.getByLabelText('Full name')).toHaveValue('Alex');
         await expect.element(page.getByLabelText('Card number')).toHaveValue('12345678');
         await expect.element(page.getByLabelText('CVV')).toHaveValue('123');
+
+        await userEvent.keyboard('{Escape}');
+        await expect.element(modalHeading).not.toBeVisible();
+
+        await page.getByRole('button', { name: 'Complete order' }).click();
+        await expect.element(modalHeading).toBeVisible();
+
+        await expect.element(page.getByLabelText('Full name')).toHaveValue('Alex');
+        await expect.element(page.getByLabelText('Card number')).toHaveValue('12345678');
+        await expect.element(page.getByLabelText('CVV')).toHaveValue('123');
     });
 
     it('sanitizes non-digit input and enforces browser form validation on payment fields', async () => {
