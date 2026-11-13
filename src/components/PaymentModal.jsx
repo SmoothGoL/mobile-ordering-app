@@ -1,7 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) {
     const dialogRef = useRef(null);
+    const [name, setName] = useState('');
+    const [cardNumber, setCardNumber] = useState('');
+    const [cvv, setCvv] = useState('');
 
     useEffect(() => {
         const dialog = dialogRef.current;
@@ -33,8 +36,11 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
         }
     }
 
-    function stripNonDigitChar(e) {
-        e.target.value = e.target.value.replace(/\D/g, '');
+    function handleFormAction(paymentFormData) {
+        onPaymentComplete(paymentFormData);
+        setName('');
+        setCardNumber('');
+        setCvv('');
     }
 
     return (
@@ -47,13 +53,15 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
             onClick={handleBackdropClick}
         >
             <h2 id="modal-title" className="modal-title">Enter card details</h2>
-            <form id="payment-form" action={onPaymentComplete}>
+            <form id="payment-form" action={handleFormAction}>
                 <input 
                     className="modal-input" 
                     type="text" 
                     name="name" 
                     aria-label="Full name"
                     placeholder="Enter your name" 
+                    value={name}
+                    onChange={e => setName(e.target.value)}
                     required 
                 />
                 <input
@@ -66,7 +74,8 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
                     minLength={8}
                     maxLength={19}
                     placeholder="Enter card number"
-                    onChange={stripNonDigitChar}
+                    value={cardNumber}
+                    onChange={e => setCardNumber(e.target.value.replace(/\D/g, ''))}
                     required
                 />
                 <input 
@@ -79,7 +88,8 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
                     minLength={3}
                     maxLength={4}
                     placeholder="Enter CVV" 
-                    onChange={stripNonDigitChar}
+                    value={cvv}
+                    onChange={e => setCvv(e.target.value.replace(/\D/g, ''))}
                     required 
                 />
                 <button id="modal-submit-btn" className="modal-submit-btn" type="submit">Pay</button>
