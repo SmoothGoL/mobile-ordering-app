@@ -87,7 +87,6 @@ export function useCart(menuItems) {
     );
 
     return {
-        cart,
         orderedItems,
         totalPrice,
         addToCart,

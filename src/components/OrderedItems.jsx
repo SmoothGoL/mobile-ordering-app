@@ -43,7 +43,7 @@ export default function OrderedItems({ orderedItems, totalPrice, onAddItem, onDe
                     <hr className="order-hr" />
                 </>
             }
-            <div className="total-price-container" style={{marginTop: (hasItems ? '0' : '30px')}}>
+            <div className="total-price-container" style={{ marginTop: hasItems ? '0' : '30px' }}>
                 <span className="total-price">Total price:</span>
                 <span className="order-price">${totalPrice}</span>
             </div>

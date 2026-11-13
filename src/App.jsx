@@ -1,9 +1,9 @@
-import Header from './components/Header';
-import PaymentModal from './components/PaymentModal';
 import { useState } from 'react';
-import ThankYouMessage from './components/ThankYouMessage';
+import Header from './components/Header';
 import MenuItems from './components/MenuItems';
 import OrderedItems from './components/OrderedItems';
+import PaymentModal from './components/PaymentModal';
+import ThankYouMessage from './components/ThankYouMessage';
 import { useCart } from './hooks/useCart';
 import { menuArray } from './assets/data';
 
@@ -19,7 +19,9 @@ export default function App() {
     }
 
     function completePayment(paymentFormData) {
-        setUserName(paymentFormData.get('name').trim());
+        const rawName = paymentFormData.get('name');
+        const name = typeof rawName === 'string' ? rawName.trim() : '';
+        setUserName(name);
         clearCart();
         setAppStatus('success');
     }

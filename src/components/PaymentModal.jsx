@@ -34,7 +34,7 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
     }
 
     function stripNonDigitChar(e) {
-        e.target.value = e.target.value.replace(/\D/g, "");
+        e.target.value = e.target.value.replace(/\D/g, '');
     }
 
     return (
@@ -71,7 +71,8 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
                 />
                 <input 
                     className="modal-input" 
-                    type="text" name="cvv" 
+                    type="text"
+                    name="cvv" 
                     aria-label="CVV"
                     inputMode="numeric"
                     pattern="[0-9]{3,4}"
