@@ -2,14 +2,17 @@ import MenuItem from './MenuItem';
 
 export default function MenuItems({ menuItems, onAddItem }) {
     return (
-        <section id="menu-items" className="menu-items">
-            {menuItems.map(menuItem => (
-                <MenuItem
-                    key={menuItem.id}
-                    item={menuItem}
-                    onAddItem={onAddItem}
-                />
-            ))}
+        <section id="menu-items" className="menu-items" aria-label="Menu">
+            <ul className="menu-list">
+                {menuItems.map(menuItem => (
+                    <li key={menuItem.id}>
+                        <MenuItem
+                            item={menuItem}
+                            onAddItem={onAddItem}
+                        />
+                    </li>
+                ))}
+            </ul>
         </section>
     );
 }

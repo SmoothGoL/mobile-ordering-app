@@ -3,7 +3,7 @@ export default function MenuItem({ item, onAddItem }) {
         <section className="menu-item" aria-label={item.name}>
             <span className="dish-icon" aria-hidden="true">{item.emoji}</span>
             <div className="menu-item-description">
-                <h3 className="menu-item-title">{item.name}</h3>
+                <h2 className="menu-item-title">{item.name}</h2>
                 <p className="ingredients">{item.ingredients.join(', ')}</p>
                 <p className="price">${item.price}</p>
             </div>

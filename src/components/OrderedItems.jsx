@@ -6,40 +6,42 @@ export default function OrderedItems({ orderedItems, totalPrice, onAddItem, onDe
             {hasItems &&
                 <>
                     <h2 className="order-title">Your order</h2>
-                    {orderedItems.map(item => (
-                        <div className="order-item-container" key={item.id}>
-                            <span className="order-item">
-                                {item.name} <span className="order-quantity">x{item.quantity}</span>
-                            </span>
-                            <div className="quantity-controls">
+                    <ul className="order-list">
+                        {orderedItems.map(item => (
+                            <li className="order-item-container" key={item.id}>
+                                <span className="order-item">
+                                    {item.name} <span className="order-quantity">x{item.quantity}</span>
+                                </span>
+                                <div className="quantity-controls">
+                                    <button
+                                        type="button"
+                                        className="qty-btn"
+                                        aria-label={`Decrease ${item.name} quantity`}
+                                        onClick={() => onDecrementItem(item.id)}
+                                    >
+                                        -
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="qty-btn"
+                                        aria-label={`Increase ${item.name} quantity`}
+                                        onClick={() => onAddItem(item.id)}
+                                    >
+                                        +
+                                    </button>
+                                </div>
                                 <button
                                     type="button"
-                                    className="qty-btn"
-                                    aria-label={`Decrease ${item.name} quantity`}
-                                    onClick={() => onDecrementItem(item.id)}
+                                    className="remove-btn"
+                                    aria-label={`Remove ${item.name} from order`}
+                                    onClick={() => onRemoveItem(item.id)}
                                 >
-                                    -
+                                    remove
                                 </button>
-                                <button
-                                    type="button"
-                                    className="qty-btn"
-                                    aria-label={`Increase ${item.name} quantity`}
-                                    onClick={() => onAddItem(item.id)}
-                                >
-                                    +
-                                </button>
-                            </div>
-                            <button
-                                type="button"
-                                className="remove-btn"
-                                aria-label={`Remove ${item.name} from order`}
-                                onClick={() => onRemoveItem(item.id)}
-                            >
-                                remove
-                            </button>
-                            <span className="order-price">${item.subtotal}</span>
-                        </div>
-                    ))}
+                                <span className="order-price">${item.subtotal}</span>
+                            </li>
+                        ))}
+                    </ul>
                     <hr className="order-hr" />
                 </>
             }
