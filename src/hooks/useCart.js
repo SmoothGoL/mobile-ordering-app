@@ -1,7 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+const CART_STORAGE_KEY = 'mobile-ordering-app:cart';
+
+function loadCartFromStorage() {
+    try {
+        const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+        if (!savedCart) return [];
+        const parsed = JSON.parse(savedCart);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(
+            item => item && item.itemId !== undefined && typeof item.quantity === 'number' && item.quantity > 0
+        );
+    } catch {
+        return [];
+    }
+}
 
 export function useCart(menuItems) {
-    const [cart, setCart] = useState([]);
+    const [cart, setCart] = useState(loadCartFromStorage);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        } catch {
+            // Ignore storage errors (e.g. private browsing or full quota)
+        }
+    }, [cart]);
 
     function addToCart(itemId) {
         setCart(prevCart => {
@@ -37,16 +61,30 @@ export function useCart(menuItems) {
         setCart([]);
     }
 
-    const orderedItems = cart.map(cartItem => {
-        const menuItem = menuItems.find(item => item.id === cartItem.itemId);
-        return {
-            ...menuItem,
-            quantity: cartItem.quantity,
-            subtotal: menuItem.price * cartItem.quantity,
-        };
-    });
+    const menuItemsById = useMemo(
+        () => new Map(menuItems.map(item => [item.id, item])),
+        [menuItems]
+    );
 
-    const totalPrice = orderedItems.reduce((total, item) => total + item.subtotal, 0);
+    const orderedItems = useMemo(
+        () =>
+            cart.reduce((items, cartItem) => {
+                const menuItem = menuItemsById.get(cartItem.itemId);
+                if (!menuItem) return items;
+                items.push({
+                    ...menuItem,
+                    quantity: cartItem.quantity,
+                    subtotal: menuItem.price * cartItem.quantity,
+                });
+                return items;
+            }, []),
+        [cart, menuItemsById]
+    );
+
+    const totalPrice = useMemo(
+        () => orderedItems.reduce((total, item) => total + item.subtotal, 0),
+        [orderedItems]
+    );
 
     return {
         cart,
