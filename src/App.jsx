@@ -8,30 +8,32 @@ import { useCart } from './hooks/useCart';
 import { menuArray } from './assets/data';
 
 export default function App() {
-    const [userName, setUserName] = useState(null);
     const { orderedItems, totalPrice, addToCart, decrementItem, removeFromCart, clearCart } = useCart(menuArray);
-    const [appStatus, setAppStatus] = useState(orderedItems.length > 0 ? 'ordering' : 'browsing'); 
-    // Possible statuses: 'browsing', 'ordering', 'paying', 'success'
+    const [hasActiveOrder, setHasActiveOrder] = useState(orderedItems.length > 0);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [completedOrderName, setCompletedOrderName] = useState(null);
 
     function handleAddItem(newItemId) {
         addToCart(newItemId);
-        setAppStatus('ordering');
+        setHasActiveOrder(true);
+        setCompletedOrderName(null);
     }
 
     function completePayment(paymentFormData) {
         const rawName = paymentFormData.get('name');
         const name = typeof rawName === 'string' ? rawName.trim() : '';
-        setUserName(name);
         clearCart();
-        setAppStatus('success');
+        setHasActiveOrder(false);
+        setIsPaymentModalOpen(false);
+        setCompletedOrderName(name);
     }
 
     function handleClosePaymentModal() {
-        setAppStatus('ordering');
+        setIsPaymentModalOpen(false);
     }
 
     function showPaymentModal() {
-        setAppStatus('paying');
+        setIsPaymentModalOpen(true);
     }
 
     return (
@@ -42,7 +44,7 @@ export default function App() {
                     menuItems={menuArray}
                     onAddItem={handleAddItem}
                 />
-                {(appStatus === 'ordering' || appStatus === 'paying') && 
+                {hasActiveOrder && 
                     <OrderedItems 
                         orderedItems={orderedItems}
                         totalPrice={totalPrice}
@@ -52,12 +54,12 @@ export default function App() {
                         showPaymentModal={showPaymentModal}
                     />
                 }
-                {appStatus === 'success' && <ThankYouMessage userName={userName} />}
+                {completedOrderName !== null && <ThankYouMessage userName={completedOrderName} />}
             </main>
             <PaymentModal 
                 onPaymentComplete={completePayment}
                 onClose={handleClosePaymentModal}
-                isVisible={appStatus === 'paying'}
+                isVisible={isPaymentModalOpen}
             />
         </>
     );

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const CART_STORAGE_KEY = 'mobile-ordering-app:cart';
 
@@ -27,7 +27,7 @@ export function useCart(menuItems) {
         }
     }, [cart]);
 
-    function addToCart(itemId) {
+    const addToCart = useCallback(itemId => {
         setCart(prevCart => {
             const existingItem = prevCart.find(cartItem => cartItem.itemId === itemId);
             if (existingItem) {
@@ -39,9 +39,9 @@ export function useCart(menuItems) {
             }
             return [...prevCart, { itemId, quantity: 1 }];
         });
-    }
+    }, []);
 
-    function decrementItem(itemId) {
+    const decrementItem = useCallback(itemId => {
         setCart(prevCart =>
             prevCart
                 .map(cartItem =>
@@ -51,15 +51,15 @@ export function useCart(menuItems) {
                 )
                 .filter(cartItem => cartItem.quantity > 0)
         );
-    }
+    }, []);
 
-    function removeFromCart(itemId) {
+    const removeFromCart = useCallback(itemId => {
         setCart(prevCart => prevCart.filter(cartItem => cartItem.itemId !== itemId));
-    }
+    }, []);
 
-    function clearCart() {
+    const clearCart = useCallback(() => {
         setCart([]);
-    }
+    }, []);
 
     const menuItemsById = useMemo(
         () => new Map(menuItems.map(item => [item.id, item])),
