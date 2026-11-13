@@ -4,49 +4,22 @@ import { useState } from 'react';
 import ThankYouMessage from './components/ThankYouMessage';
 import MenuItems from './components/MenuItems';
 import OrderedItems from './components/OrderedItems';
+import { useCart } from './hooks/useCart';
 
 export default function App() {
     const [appStatus, setAppStatus] = useState('browsing'); 
     // Possible statuses: 'browsing', 'ordering', 'paying', 'success'
     const [userName, setUserName] = useState(null);
-    const [orderArr, setOrderArr] = useState([]);
+    const { orderedItems, totalPrice, addToCart, decrementItem, removeFromCart, clearCart } = useCart();
 
     function handleAddItem(newItemId) {
-        setOrderArr(prevOrderArr => {
-            const existingItem = prevOrderArr.find(orderItem => orderItem.itemId === newItemId);
-            if (existingItem) {
-                return prevOrderArr.map(orderItem =>
-                    orderItem.itemId === newItemId
-                        ? { ...orderItem, quantity: orderItem.quantity + 1 }
-                        : orderItem
-                );
-            }
-            return [...prevOrderArr, { itemId: newItemId, quantity: 1 }];
-        });
+        addToCart(newItemId);
         setAppStatus('ordering');
-    }
-
-    function handleDecrementItem(itemId) {
-        setOrderArr(prevOrderArr =>
-            prevOrderArr
-                .map(orderItem =>
-                    orderItem.itemId === itemId
-                        ? { ...orderItem, quantity: orderItem.quantity - 1 }
-                        : orderItem
-                )
-                .filter(orderItem => orderItem.quantity > 0)
-        );
-    }
-
-    function handleRemoveItem(itemId) {
-        setOrderArr(prevOrderArr =>
-            prevOrderArr.filter(orderItem => orderItem.itemId !== itemId)
-        );
     }
 
     function completePayment(paymentFormData) {
         setUserName(paymentFormData.get('name').trim());
-        setOrderArr([]);
+        clearCart();
         setAppStatus('success')
     }
 
@@ -67,10 +40,11 @@ export default function App() {
                 />
                 {(appStatus === 'ordering' || appStatus === 'paying') && 
                     <OrderedItems 
-                        orderArr={orderArr}
+                        orderedItems={orderedItems}
+                        totalPrice={totalPrice}
                         onAddItem={handleAddItem}
-                        onDecrementItem={handleDecrementItem}
-                        onRemoveItem={handleRemoveItem}
+                        onDecrementItem={decrementItem}
+                        onRemoveItem={removeFromCart}
                         showPaymentModal={showPaymentModal}
                     />
                 }

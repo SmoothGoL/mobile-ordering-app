@@ -1,16 +1,4 @@
-import { menuArray } from '../assets/data';
-
-export default function OrderedItems({ orderArr, onAddItem, onDecrementItem, onRemoveItem, showPaymentModal }) {
-    const orderedItems = orderArr.map(orderItem => {
-        const menuItem = menuArray.find(item => item.id === orderItem.itemId);
-        return {
-            ...menuItem,
-            quantity: orderItem.quantity,
-            subtotal: menuItem.price * orderItem.quantity,
-        };
-    });
-
-    const totalPrice = orderedItems.reduce((total, item) => total + item.subtotal, 0);
+export default function OrderedItems({ orderedItems, totalPrice, onAddItem, onDecrementItem, onRemoveItem, showPaymentModal }) {
     const hasItems = orderedItems.length > 0;
 
     return (
