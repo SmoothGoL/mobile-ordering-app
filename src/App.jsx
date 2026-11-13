@@ -8,10 +8,10 @@ import { useCart } from './hooks/useCart';
 import { menuArray } from './assets/data';
 
 export default function App() {
-    const [appStatus, setAppStatus] = useState('browsing'); 
-    // Possible statuses: 'browsing', 'ordering', 'paying', 'success'
     const [userName, setUserName] = useState(null);
     const { orderedItems, totalPrice, addToCart, decrementItem, removeFromCart, clearCart } = useCart(menuArray);
+    const [appStatus, setAppStatus] = useState(orderedItems.length > 0 ? 'ordering' : 'browsing'); 
+    // Possible statuses: 'browsing', 'ordering', 'paying', 'success'
 
     function handleAddItem(newItemId) {
         addToCart(newItemId);
