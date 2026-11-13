@@ -1,10 +1,9 @@
-import { menuArray } from '../assets/data';
 import MenuItem from './MenuItem';
 
-export default function MenuItems({ onAddItem }) {
+export default function MenuItems({ menuItems, onAddItem }) {
     return (
         <section id="menu-items" className="menu-items">
-            {menuArray.map(menuItem => (
+            {menuItems.map(menuItem => (
                 <MenuItem
                     key={menuItem.id}
                     item={menuItem}

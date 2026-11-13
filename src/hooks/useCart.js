@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { menuArray } from '../assets/data';
 
-export function useCart() {
+export function useCart(menuItems) {
     const [cart, setCart] = useState([]);
 
     function addToCart(itemId) {
@@ -39,7 +38,7 @@ export function useCart() {
     }
 
     const orderedItems = cart.map(cartItem => {
-        const menuItem = menuArray.find(item => item.id === cartItem.itemId);
+        const menuItem = menuItems.find(item => item.id === cartItem.itemId);
         return {
             ...menuItem,
             quantity: cartItem.quantity,

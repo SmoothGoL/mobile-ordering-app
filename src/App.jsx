@@ -5,12 +5,13 @@ import ThankYouMessage from './components/ThankYouMessage';
 import MenuItems from './components/MenuItems';
 import OrderedItems from './components/OrderedItems';
 import { useCart } from './hooks/useCart';
+import { menuArray } from './assets/data';
 
 export default function App() {
     const [appStatus, setAppStatus] = useState('browsing'); 
     // Possible statuses: 'browsing', 'ordering', 'paying', 'success'
     const [userName, setUserName] = useState(null);
-    const { orderedItems, totalPrice, addToCart, decrementItem, removeFromCart, clearCart } = useCart();
+    const { orderedItems, totalPrice, addToCart, decrementItem, removeFromCart, clearCart } = useCart(menuArray);
 
     function handleAddItem(newItemId) {
         addToCart(newItemId);
@@ -36,6 +37,7 @@ export default function App() {
             <Header />
             <main>
                 <MenuItems 
+                    menuItems={menuArray}
                     onAddItem={handleAddItem}
                 />
                 {(appStatus === 'ordering' || appStatus === 'paying') && 
