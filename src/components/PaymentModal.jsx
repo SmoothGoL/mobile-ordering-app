@@ -33,6 +33,10 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
         }
     }
 
+    function stripNonDigitChar(e) {
+        e.target.value = e.target.value.replace(/\D/g, "");
+    }
+
     return (
         <dialog
             ref={dialogRef}
@@ -52,23 +56,29 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
                     placeholder="Enter your name" 
                     required 
                 />
-                <input 
-                    className="modal-input" 
-                    type="text" 
-                    name="card-number" 
+                <input
+                    className="modal-input"
+                    type="text"
+                    name="card-number"
                     aria-label="Card number"
                     inputMode="numeric"
-                    pattern="[0-9]*"
-                    placeholder="Enter card number" 
-                    required 
+                    pattern="[0-9]{8,19}"
+                    minLength={8}
+                    maxLength={19}
+                    placeholder="Enter card number"
+                    onChange={stripNonDigitChar}
+                    required
                 />
                 <input 
                     className="modal-input" 
                     type="text" name="cvv" 
                     aria-label="CVV"
                     inputMode="numeric"
-                    pattern="[0-9]*"
+                    pattern="[0-9]{3,4}"
+                    minLength={3}
+                    maxLength={4}
                     placeholder="Enter CVV" 
+                    onChange={stripNonDigitChar}
                     required 
                 />
                 <button id="modal-submit-btn" className="modal-submit-btn" type="submit">Pay</button>
