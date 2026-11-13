@@ -37,6 +37,9 @@ describe('Mobile ordering app user flows', () => {
         await expect
             .element(page.getByText(/Thanks, .*! Your order is on its way!/))
             .not.toBeInTheDocument();
+        await expect
+            .element(page.getByRole('button', { name: "Complete order"}))
+            .not.toBeInTheDocument();
     });
 
     it('lets a user add items, adjust quantities, remove items, and disables checkout when empty', async () => {
