@@ -1,6 +1,6 @@
 export default function MenuItem({ item, onAddItem }) {
     return (
-        <section className="menu-item">
+        <section className="menu-item" aria-label={item.name}>
             <span className="dish-icon" aria-hidden="true">{item.emoji}</span>
             <div className="menu-item-description">
                 <h3 className="menu-item-title">{item.name}</h3>

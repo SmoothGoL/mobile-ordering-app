@@ -26,10 +26,17 @@ describe('Mobile ordering app user flows', () => {
         await expect.element(page.getByRole('heading', { name: 'Beer' })).toBeVisible();
         await expect.element(page.getByText('grain, hops, yeast, water')).toBeVisible();
 
-        const menuPrices = Array.from(container.querySelectorAll('.menu-item .price')).map(
-            el => el.textContent
-        );
-        expect(menuPrices).toEqual(['$14', '$12', '$12']);
+        await expect.element(
+            page.getByRole('region', { name: 'Pizza' }).getByText('$14')
+        ).toBeVisible();
+
+        await expect.element(
+            page.getByRole('region', { name: 'Hamburger' }).getByText('$12')
+        ).toBeVisible();
+
+        await expect.element(
+            page.getByRole('region', { name: 'Beer' }).getByText('$12')
+        ).toBeVisible();
 
         await expect
             .element(page.getByRole('heading', { name: 'Your order' }))
