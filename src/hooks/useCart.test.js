@@ -82,6 +82,14 @@ describe('useCart', () => {
         expect(result.current.orderedItems[0].id).toBe(1);
 
         await act(() => {
+            result.current.addToCart(0);
+            result.current.addToCart(0);
+        });
+
+        expect(result.current.orderedItems).toHaveLength(2);
+        expect(result.current.orderedItems[0].id).toBe(1);
+
+        await act(() => {
             result.current.clearCart();
         });
         expect(result.current.orderedItems).toEqual([]);
