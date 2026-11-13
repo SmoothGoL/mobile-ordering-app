@@ -160,6 +160,33 @@ describe('Mobile ordering app user flows', () => {
             .toHaveTextContent('Total price:$12');
     });
 
+    it('preserves entered payment form inputs when the modal is closed without submitting', async () => {
+        await render(<App />);
+
+        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
+        await page.getByRole('button', { name: 'Complete order' }).click();
+
+        const modalHeading = page.getByRole('heading', {
+            name: 'Enter card details',
+            includeHidden: true,
+        });
+        await expect.element(modalHeading).toBeVisible();
+
+        await userEvent.fill(page.getByLabelText('Full name'), 'Alex');
+        await userEvent.fill(page.getByLabelText('Card number'), '12345678');
+        await userEvent.fill(page.getByLabelText('CVV'), '123');
+
+        await page.getByRole('button', { name: 'Close payment modal' }).click();
+        await expect.element(modalHeading).not.toBeVisible();
+
+        await page.getByRole('button', { name: 'Complete order' }).click();
+        await expect.element(modalHeading).toBeVisible();
+
+        await expect.element(page.getByLabelText('Full name')).toHaveValue('Alex');
+        await expect.element(page.getByLabelText('Card number')).toHaveValue('12345678');
+        await expect.element(page.getByLabelText('CVV')).toHaveValue('123');
+    });
+
     it('sanitizes non-digit input and enforces browser form validation on payment fields', async () => {
         const { container } = await render(<App />);
 
