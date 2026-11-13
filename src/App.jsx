@@ -20,15 +20,15 @@ export default function App() {
     function completePayment(paymentFormData) {
         setUserName(paymentFormData.get('name').trim());
         clearCart();
-        setAppStatus('success')
+        setAppStatus('success');
     }
 
     function handleClosePaymentModal() {
-        setAppStatus('ordering')
+        setAppStatus('ordering');
     }
 
     function showPaymentModal() {
-        setAppStatus('paying')
+        setAppStatus('paying');
     }
 
     return (

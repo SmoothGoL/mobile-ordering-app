@@ -49,7 +49,6 @@ main {
 .menu-item {
     margin-top: min(45px, 7.5vw);
     border-bottom: 1px solid #d2d2d2;
-    /* border: 1px solid red; */
     display: flex;
     padding-bottom: min(48px, 8vw);
 }

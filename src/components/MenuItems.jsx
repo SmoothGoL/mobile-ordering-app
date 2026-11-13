@@ -4,17 +4,13 @@ import MenuItem from './MenuItem';
 export default function MenuItems({ onAddItem }) {
     return (
         <section id="menu-items" className="menu-items">
-            {
-                menuArray.map(menuItem => {
-                    return (
-                        <MenuItem 
-                            key={menuItem.id}
-                            item={menuItem}
-                            onAddItem={onAddItem}
-                        />
-                    );
-                })
-            }
+            {menuArray.map(menuItem => (
+                <MenuItem
+                    key={menuItem.id}
+                    item={menuItem}
+                    onAddItem={onAddItem}
+                />
+            ))}
         </section>
     );
 }

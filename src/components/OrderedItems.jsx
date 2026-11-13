@@ -13,6 +13,7 @@ export default function OrderedItems({ orderedItems, totalPrice, onAddItem, onDe
                             </span>
                             <div className="quantity-controls">
                                 <button
+                                    type="button"
                                     className="qty-btn"
                                     aria-label={`Decrease ${item.name} quantity`}
                                     onClick={() => onDecrementItem(item.id)}
@@ -20,6 +21,7 @@ export default function OrderedItems({ orderedItems, totalPrice, onAddItem, onDe
                                     -
                                 </button>
                                 <button
+                                    type="button"
                                     className="qty-btn"
                                     aria-label={`Increase ${item.name} quantity`}
                                     onClick={() => onAddItem(item.id)}
@@ -27,7 +29,14 @@ export default function OrderedItems({ orderedItems, totalPrice, onAddItem, onDe
                                     +
                                 </button>
                             </div>
-                            <button className="remove-btn" onClick={() => onRemoveItem(item.id)}>remove</button>
+                            <button
+                                type="button"
+                                className="remove-btn"
+                                aria-label={`Remove ${item.name} from order`}
+                                onClick={() => onRemoveItem(item.id)}
+                            >
+                                remove
+                            </button>
                             <span className="order-price">${item.subtotal}</span>
                         </div>
                     ))}
@@ -39,6 +48,7 @@ export default function OrderedItems({ orderedItems, totalPrice, onAddItem, onDe
                 <span className="order-price">${totalPrice}</span>
             </div>
             <button
+                type="button"
                 id="complete-order-btn"
                 className="complete-order-btn"
                 onClick={showPaymentModal}
