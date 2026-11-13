@@ -5,7 +5,7 @@ import App from './App';
 
 describe('Mobile ordering app user flows', () => {
     it('renders the header and full menu in the initial browsing state', async () => {
-        const { container } = await render(<App />);
+        await render(<App />);
 
         await expect
             .element(
