@@ -14,4 +14,8 @@ export default defineConfig({
       "mobile-ordering-app.smoothgol.com",
     ],
   },
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.js',
+  },
 })
