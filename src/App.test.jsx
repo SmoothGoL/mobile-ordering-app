@@ -407,4 +407,57 @@ describe('Mobile ordering app user flows', () => {
             .element(container.querySelector('.total-price-container'))
             .toHaveTextContent('Total price:$14');
     });
+
+    it('completes checkout for a cart restored from localStorage', async () => {
+        localStorage.setItem(
+            'mobile-ordering-app:cart',
+            JSON.stringify([{ itemId: 0, quantity: 2 }])
+        );
+
+        await render(<App />);
+
+        await expect.element(page.getByRole('heading', { name: 'Your order' })).toBeVisible();
+        await expect.element(page.getByText('x2')).toBeVisible();
+
+        await page.getByRole('button', { name: 'Complete order' }).click();
+        await userEvent.fill(page.getByLabelText('Full name'), 'Jordan');
+        await userEvent.fill(page.getByLabelText('Card number'), '12345678');
+        await userEvent.fill(page.getByLabelText('CVV'), '123');
+        await page.getByRole('button', { name: 'Pay' }).click();
+
+        await expect
+            .element(page.getByText('Thanks, Jordan! Your order is on its way!'))
+            .toBeVisible();
+        await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
+        await expect
+            .poll(() => JSON.parse(localStorage.getItem('mobile-ordering-app:cart')))
+            .toEqual([]);
+    });
+
+    it('adjusts one item quantity without affecting other items in a multi-item order', async () => {
+        const { container } = await render(<App />);
+
+        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
+        await page.getByRole('button', { name: 'Add Hamburger to order' }).click();
+        await page.getByRole('button', { name: 'Increase Pizza quantity' }).click();
+
+        const orderRows = container.querySelectorAll('.order-item-container');
+        expect(orderRows).toHaveLength(2);
+        await expect.element(orderRows[0].querySelector('.order-item')).toHaveTextContent('Pizza x2');
+        await expect.element(orderRows[0].querySelector('.order-price')).toHaveTextContent('$28');
+        await expect.element(orderRows[1].querySelector('.order-item')).toHaveTextContent('Hamburger x1');
+        await expect.element(orderRows[1].querySelector('.order-price')).toHaveTextContent('$12');
+        await expect
+            .element(container.querySelector('.total-price-container'))
+            .toHaveTextContent('Total price:$40');
+
+        await page.getByRole('button', { name: 'Decrease Pizza quantity' }).click();
+        await expect.element(orderRows[0].querySelector('.order-item')).toHaveTextContent('Pizza x1');
+        await expect.element(orderRows[0].querySelector('.order-price')).toHaveTextContent('$14');
+        await expect.element(orderRows[1].querySelector('.order-item')).toHaveTextContent('Hamburger x1');
+        await expect.element(orderRows[1].querySelector('.order-price')).toHaveTextContent('$12');
+        await expect
+            .element(container.querySelector('.total-price-container'))
+            .toHaveTextContent('Total price:$26');
+    });
 });

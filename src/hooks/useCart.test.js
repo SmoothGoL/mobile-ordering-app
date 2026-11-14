@@ -13,6 +13,7 @@ describe('useCart', () => {
 
         expect(result.current.orderedItems).toEqual([]);
         expect(result.current.totalPrice).toBe(0);
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([]);
     });
 
     it('adds items, increments quantity, and calculates subtotals and totalPrice', async () => {
@@ -64,6 +65,7 @@ describe('useCart', () => {
         });
         expect(result.current.orderedItems).toEqual([]);
         expect(result.current.totalPrice).toBe(0);
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([]);
     });
 
     it('removes an item regardless of quantity and clears the cart', async () => {
@@ -94,6 +96,7 @@ describe('useCart', () => {
         });
         expect(result.current.orderedItems).toEqual([]);
         expect(result.current.totalPrice).toBe(0);
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([]);
     });
 
     it('persists cart to localStorage and handles corrupted or invalid stored data', async () => {
@@ -173,6 +176,7 @@ describe('useCart', () => {
 
         expect(result.current.orderedItems).toEqual([]);
         expect(result.current.totalPrice).toBe(0);
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([]);
     });
 
     it('updates localStorage to an empty array when items are decremented to zero, removed, or cleared', async () => {
@@ -268,5 +272,37 @@ describe('useCart', () => {
             getItemSpy.mockRestore();
             setItemSpy.mockRestore();
         }
+    });
+
+    it('deduplicates repeated itemIds and rejects null itemIds and fractional quantities from storage', async () => {
+        localStorage.setItem(
+            'mobile-ordering-app:cart',
+            JSON.stringify([
+                { itemId: null, quantity: 2 },
+                { itemId: 0, quantity: 1.5 },
+                { itemId: 0, quantity: 1 },
+                { itemId: 1, quantity: 2 },
+                { itemId: 0, quantity: 2 },
+            ])
+        );
+
+        const { result } = await renderHook(() => useCart(sampleMenu));
+
+        expect(result.current.orderedItems).toHaveLength(2);
+        expect(result.current.orderedItems[0]).toMatchObject({
+            id: 0,
+            quantity: 2,
+            subtotal: 28,
+        });
+        expect(result.current.orderedItems[1]).toMatchObject({
+            id: 1,
+            quantity: 2,
+            subtotal: 24,
+        });
+        expect(result.current.totalPrice).toBe(52);
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([
+            { itemId: 0, quantity: 2 },
+            { itemId: 1, quantity: 2 },
+        ]);
     });
 });

@@ -8,9 +8,21 @@ function loadCartFromStorage() {
         if (!savedCart) return [];
         const parsed = JSON.parse(savedCart);
         if (!Array.isArray(parsed)) return [];
-        return parsed.filter(
-            item => item && item.itemId !== undefined && typeof item.quantity === 'number' && item.quantity > 0
-        );
+        const deduplicated = new Map();
+        for (const item of parsed) {
+            if (
+                item &&
+                item.itemId != null &&
+                Number.isInteger(item.quantity) &&
+                item.quantity > 0
+            ) {
+                deduplicated.set(
+                    item.itemId,
+                    item.quantity
+                );
+            }
+        }
+        return Array.from(deduplicated, ([itemId, quantity]) => ({ itemId, quantity }));
     } catch {
         return [];
     }
@@ -27,7 +39,13 @@ export function useCart(menuItems) {
         }
     }, [cart]);
 
+    const menuItemsById = useMemo(
+        () => new Map(menuItems.map(item => [item.id, item])),
+        [menuItems]
+    );
+
     const addToCart = useCallback(itemId => {
+        if (!menuItemsById.has(itemId)) return;
         setCart(prevCart => {
             const existingItem = prevCart.find(cartItem => cartItem.itemId === itemId);
             if (existingItem) {
@@ -39,7 +57,7 @@ export function useCart(menuItems) {
             }
             return [...prevCart, { itemId, quantity: 1 }];
         });
-    }, []);
+    }, [menuItemsById]);
 
     const decrementItem = useCallback(itemId => {
         setCart(prevCart =>
@@ -60,11 +78,6 @@ export function useCart(menuItems) {
     const clearCart = useCallback(() => {
         setCart([]);
     }, []);
-
-    const menuItemsById = useMemo(
-        () => new Map(menuItems.map(item => [item.id, item])),
-        [menuItems]
-    );
 
     const orderedItems = useMemo(
         () =>
