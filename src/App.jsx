@@ -22,6 +22,7 @@ export default function App() {
     function completePayment(paymentFormData) {
         const rawName = paymentFormData.get('name');
         const name = typeof rawName === 'string' ? rawName.trim() : '';
+        if (!name) return;
         clearCart();
         setHasActiveOrder(false);
         setIsPaymentModalOpen(false);

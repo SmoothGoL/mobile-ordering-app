@@ -60,6 +60,8 @@ export default function PaymentModal({ isVisible, onPaymentComplete, onClose }) 
                     name="name" 
                     aria-label="Full name"
                     placeholder="Enter your name" 
+                    pattern=".*\S.*"
+                    title="Please enter your name"
                     value={name}
                     onChange={e => setName(e.target.value)}
                     required 

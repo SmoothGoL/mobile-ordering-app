@@ -381,4 +381,30 @@ describe('Mobile ordering app user flows', () => {
         await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
         await expect.element(page.getByRole('button', { name: 'Complete order' })).not.toBeInTheDocument();
     });
+
+    it('rejects whitespace-only name submission and keeps the order intact', async () => {
+        const { container } = await render(<App />);
+
+        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
+        await page.getByRole('button', { name: 'Complete order' }).click();
+
+        await userEvent.fill(page.getByLabelText('Full name'), '   ');
+        await userEvent.fill(page.getByLabelText('Card number'), '12345678');
+        await userEvent.fill(page.getByLabelText('CVV'), '123');
+
+        const paymentForm = container.querySelector('#payment-form');
+        expect(paymentForm.checkValidity()).toBe(false);
+
+        await page.getByRole('button', { name: 'Pay' }).click();
+
+        await expect
+            .element(page.getByRole('heading', { name: 'Enter card details' }))
+            .toBeVisible();
+        await expect
+            .element(page.getByText(/Thanks, .*! Your order is on its way!/))
+            .not.toBeInTheDocument();
+        await expect
+            .element(container.querySelector('.total-price-container'))
+            .toHaveTextContent('Total price:$14');
+    });
 });
