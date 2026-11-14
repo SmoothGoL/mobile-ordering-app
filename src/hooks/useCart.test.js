@@ -279,10 +279,10 @@ describe('useCart', () => {
             'mobile-ordering-app:cart',
             JSON.stringify([
                 { itemId: null, quantity: 2 },
-                { itemId: 0, quantity: 1.5 },
                 { itemId: 0, quantity: 1 },
                 { itemId: 1, quantity: 2 },
                 { itemId: 0, quantity: 2 },
+                { itemId: 0, quantity: 1.5 },
             ])
         );
 
