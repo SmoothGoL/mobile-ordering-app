@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Header from './components/Header';
-import MenuItems from './components/MenuItems';
+import MenuList from './components/MenuList';
 import OrderedItems from './components/OrderedItems';
 import PaymentModal from './components/PaymentModal';
 import ThankYouMessage from './components/ThankYouMessage';
@@ -40,7 +40,7 @@ export default function App() {
         <>
             <Header />
             <main>
-                <MenuItems 
+                <MenuList 
                     menuItems={menuArray}
                     onAddItem={handleAddItem}
                 />

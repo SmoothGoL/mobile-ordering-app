@@ -1,6 +1,6 @@
 import MenuItem from './MenuItem';
 
-export default function MenuItems({ menuItems, onAddItem }) {
+export default function MenuList({ menuItems, onAddItem }) {
     return (
         <section id="menu-items" className="menu-items" aria-label="Menu">
             <ul className="menu-list">
