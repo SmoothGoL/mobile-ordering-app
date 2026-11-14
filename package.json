@@ -1,0 +1,26 @@
+{
+  "name": "mobile-ordering-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run dev --prefix frontend",
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "lint": "npm run lint --prefix frontend",
+    "preview": "npm run preview --prefix frontend",
+    "test": "npm test --prefix frontend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:all": "concurrently -n \"VITE,API\" -c \"cyan,green\" \"npm run dev:frontend\" \"npm run dev:backend\""
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SmoothGoL/mobile-ordering-app.git"
+  },
+  "keywords": [],
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}
