@@ -1,5 +1,5 @@
 import { renderHook } from 'vitest-browser-react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { useCart } from './useCart';
 
 const sampleMenu = [
@@ -139,5 +139,134 @@ describe('useCart', () => {
             subtotal: 28,
         });
         expect(filtered.result.current.totalPrice).toBe(28);
+    });
+
+    it('handles batched state updates within a single act without stale closures', async () => {
+        const { result, act } = await renderHook(() => useCart(sampleMenu));
+
+        await act(() => {
+            result.current.addToCart(0);
+            result.current.addToCart(0);
+            result.current.addToCart(1);
+            result.current.decrementItem(0);
+            result.current.removeFromCart(1);
+        });
+
+        expect(result.current.orderedItems).toHaveLength(1);
+        expect(result.current.orderedItems[0]).toMatchObject({
+            id: 0,
+            quantity: 1,
+            subtotal: 14,
+        });
+        expect(result.current.totalPrice).toBe(14);
+    });
+
+    it('ignores unknown menu item IDs and safely handles operations on an empty cart', async () => {
+        const { result, act } = await renderHook(() => useCart(sampleMenu));
+
+        await act(() => {
+            result.current.decrementItem(0);
+            result.current.removeFromCart(0);
+            result.current.clearCart();
+            result.current.addToCart(999);
+        });
+
+        expect(result.current.orderedItems).toEqual([]);
+        expect(result.current.totalPrice).toBe(0);
+    });
+
+    it('updates localStorage to an empty array when items are decremented to zero, removed, or cleared', async () => {
+        const { result, act } = await renderHook(() => useCart(sampleMenu));
+
+        await act(() => {
+            result.current.addToCart(0);
+        });
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([
+            { itemId: 0, quantity: 1 },
+        ]);
+
+        await act(() => {
+            result.current.decrementItem(0);
+        });
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([]);
+
+        await act(() => {
+            result.current.addToCart(1);
+        });
+        await act(() => {
+            result.current.removeFromCart(1);
+        });
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([]);
+
+        await act(() => {
+            result.current.addToCart(0);
+            result.current.addToCart(1);
+        });
+        await act(() => {
+            result.current.clearCart();
+        });
+        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([]);
+    });
+
+    it('rejects non-numeric quantities in storage and recomputes when menuItems change', async () => {
+        localStorage.setItem(
+            'mobile-ordering-app:cart',
+            JSON.stringify([
+                { itemId: 0, quantity: '2' },
+                { itemId: 1, quantity: true },
+                { itemId: 0, quantity: 1 },
+            ])
+        );
+
+        const { result, rerender } = await renderHook(
+            ({ menu }) => useCart(menu),
+            { initialProps: { menu: sampleMenu } }
+        );
+
+        expect(result.current.orderedItems).toHaveLength(1);
+        expect(result.current.orderedItems[0]).toMatchObject({
+            id: 0,
+            quantity: 1,
+            subtotal: 14,
+        });
+        expect(result.current.totalPrice).toBe(14);
+
+        const updatedMenu = [
+            { id: 0, name: 'Pizza', price: 20, ingredients: ['pepperoni'], emoji: '🍕' },
+        ];
+        await rerender({ menu: updatedMenu });
+
+        expect(result.current.orderedItems[0].subtotal).toBe(20);
+        expect(result.current.totalPrice).toBe(20);
+
+        await rerender({ menu: [] });
+        expect(result.current.orderedItems).toEqual([]);
+        expect(result.current.totalPrice).toBe(0);
+    });
+
+    it('recovers gracefully when localStorage.getItem or localStorage.setItem throws', async () => {
+        const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+            throw new DOMException('Storage disabled', 'SecurityError');
+        });
+        const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+            throw new DOMException('Quota exceeded', 'QuotaExceededError');
+        });
+
+        try {
+            const { result, act } = await renderHook(() => useCart(sampleMenu));
+
+            expect(result.current.orderedItems).toEqual([]);
+            expect(result.current.totalPrice).toBe(0);
+
+            await act(() => {
+                result.current.addToCart(0);
+            });
+
+            expect(result.current.orderedItems).toHaveLength(1);
+            expect(result.current.totalPrice).toBe(14);
+        } finally {
+            getItemSpy.mockRestore();
+            setItemSpy.mockRestore();
+        }
     });
 });

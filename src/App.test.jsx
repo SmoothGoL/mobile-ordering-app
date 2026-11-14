@@ -284,4 +284,101 @@ describe('Mobile ordering app user flows', () => {
             .element(container.querySelector('.total-price-container'))
             .toHaveTextContent('Total price:$12');
     });
+
+    it('keeps the payment modal open when clicking inside the dialog', async () => {
+        await render(<App />);
+
+        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
+        await page.getByRole('button', { name: 'Complete order' }).click();
+
+        const modalHeading = page.getByRole('heading', { name: 'Enter card details' });
+        await expect.element(modalHeading).toBeVisible();
+
+        await modalHeading.click();
+        await expect.element(modalHeading).toBeVisible();
+    });
+
+    it('enforces maxLength limits and accepts minimum valid card and CVV lengths', async () => {
+        await render(<App />);
+
+        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
+        await page.getByRole('button', { name: 'Complete order' }).click();
+
+        const nameInput = page.getByLabelText('Full name');
+        const cardInput = page.getByLabelText('Card number');
+        const cvvInput = page.getByLabelText('CVV');
+
+        await userEvent.type(cardInput, '1234567890123456789012');
+        await userEvent.type(cvvInput, '12345');
+
+        await expect.element(cardInput).toHaveValue('1234567890123456789');
+        await expect.element(cvvInput).toHaveValue('1234');
+
+        // Minimum valid lengths (8-digit card, 3-digit CVV) submit successfully
+        await userEvent.fill(nameInput, 'Sam');
+        await userEvent.fill(cardInput, '12345678');
+        await userEvent.fill(cvvInput, '123');
+        await page.getByRole('button', { name: 'Pay' }).click();
+
+        await expect
+            .element(page.getByText('Thanks, Sam! Your order is on its way!'))
+            .toBeVisible();
+    });
+
+    it('resets payment form inputs after submission so a subsequent order starts with an empty form', async () => {
+        await render(<App />);
+
+        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
+        await page.getByRole('button', { name: 'Complete order' }).click();
+
+        await userEvent.fill(page.getByLabelText('Full name'), 'Alex');
+        await userEvent.fill(page.getByLabelText('Card number'), '12345678');
+        await userEvent.fill(page.getByLabelText('CVV'), '123');
+        await page.getByRole('button', { name: 'Pay' }).click();
+
+        await expect
+            .element(page.getByText('Thanks, Alex! Your order is on its way!'))
+            .toBeVisible();
+
+        await page.getByRole('button', { name: 'Add Beer to order' }).click();
+        await page.getByRole('button', { name: 'Complete order' }).click();
+
+        await expect.element(page.getByLabelText('Full name')).toHaveValue('');
+        await expect.element(page.getByLabelText('Card number')).toHaveValue('');
+        await expect.element(page.getByLabelText('CVV')).toHaveValue('');
+    });
+
+    it('re-enables checkout when an item is added after emptying the order', async () => {
+        const { container } = await render(<App />);
+
+        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
+        await page.getByRole('button', { name: 'Remove Pizza from order' }).click();
+
+        const completeOrderBtn = page.getByRole('button', { name: 'Complete order' });
+        await expect.element(completeOrderBtn).toBeDisabled();
+
+        await page.getByRole('button', { name: 'Add Hamburger to order' }).click();
+        await expect.element(completeOrderBtn).toBeEnabled();
+        await expect
+            .element(container.querySelector('.total-price-container'))
+            .toHaveTextContent('Total price:$12');
+    });
+
+    it('renders initial browsing state cleanly when localStorage has corrupted or unknown-only cart data', async () => {
+        localStorage.setItem('mobile-ordering-app:cart', '{invalid-json');
+        const corruptedRender = await render(<App />);
+
+        await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
+        await expect.element(page.getByRole('button', { name: 'Complete order' })).not.toBeInTheDocument();
+        await corruptedRender.unmount();
+
+        localStorage.setItem(
+            'mobile-ordering-app:cart',
+            JSON.stringify([{ itemId: 999, quantity: 2 }])
+        );
+        await render(<App />);
+
+        await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
+        await expect.element(page.getByRole('button', { name: 'Complete order' })).not.toBeInTheDocument();
+    });
 });
