@@ -10,12 +10,12 @@
     "dev:frontend": "npm run dev --prefix frontend",
     "dev:backend": "npm run dev --prefix backend",
     "dev:all": "concurrently -n \"VITE,API\" -c \"cyan,green\" \"npm run dev:frontend\" \"npm run dev:backend\""
-
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SmoothGoL/mobile-ordering-app.git"
   },
+  "homepage": "https://mobile-ordering-app.smoothgol.org",
   "keywords": [],
   "type": "module",
   "devDependencies": {

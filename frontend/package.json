@@ -7,6 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/SmoothGoL/mobile-ordering-app.git"
   },
+  "homepage": "https://mobile-ordering-app.smoothgol.org",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
