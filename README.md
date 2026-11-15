@@ -1,6 +1,30 @@
-This is a solo project provided by Scrimba. 
-The images are provided by the Scrimba Figma design. 
-Instructions were given on what the web app should look like and how it should behave.
-This web app does not contain any async JavaScript or fetch requests.
+# Mobile Ordering App
 
-This app was completely rewritten in React.
+A full-stack monorepo featuring a React frontend and a planned Express backend.
+
+## Project Structure
+
+* `./frontend` – React web application
+* `./backend` – Express server *(planned)*
+
+## Background
+
+This project began as a Scrimba solo project originally designed for HTML, CSS, and vanilla JavaScript. Using Scrimba's Figma design files and behavioral specs as a blueprint, I rebuilt the entire frontend from scratch in React. 
+
+All visual assets are sourced from the original Scrimba Figma design.
+
+## Current Status & Roadmap
+
+* [x] Rebuild UI and core interactions in React
+* [ ] Build out the Express backend in `./backend`
+* [ ] Implement asynchronous JavaScript and API fetch requests
+
+## Getting Started
+
+To run the frontend locally, make sure you have [Node.js](https://nodejs.org/) installed, then run:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
