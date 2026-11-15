@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npm run dev --prefix frontend",
-    "dev": "npm run dev --prefix frontend",
-    "build": "npm run build --prefix frontend",
-    "lint": "npm run lint --prefix frontend",
-    "preview": "npm run preview --prefix frontend",
-    "test": "npm test --prefix frontend",
+    "build:frontend": "npm run build --prefix frontend",
+    "lint:frontend": "npm run lint --prefix frontend",
+    "preview:frontend": "npm run preview --prefix frontend",
+    "test:frontend": "npm test --prefix frontend",
     "dev:frontend": "npm run dev --prefix frontend",
     "dev:backend": "npm run dev --prefix backend",
     "dev:all": "concurrently -n \"VITE,API\" -c \"cyan,green\" \"npm run dev:frontend\" \"npm run dev:backend\""
