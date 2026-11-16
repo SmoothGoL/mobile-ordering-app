@@ -9,7 +9,8 @@
     "test:frontend": "npm test --prefix frontend",
     "dev:frontend": "npm run dev --prefix frontend",
     "dev:backend": "npm run dev --prefix backend",
-    "dev:all": "concurrently -n \"VITE,API\" -c \"cyan,green\" \"npm run dev:frontend\" \"npm run dev:backend\""
+    "dev:all": "concurrently -n \"VITE,API\" -c \"cyan,green\" \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "keywords": [],
   "type": "module",
   "devDependencies": {
-    "concurrently": "^10.0.7"
+    "concurrently": "^10.0.7",
+    "prettier": "3.10.1"
   }
 }

@@ -1,463 +1,531 @@
-import { page, userEvent } from 'vitest/browser';
-import { render } from 'vitest-browser-react';
-import { describe, expect, it } from 'vitest';
-import App from './App';
+import { page, userEvent } from "vitest/browser";
+import { render } from "vitest-browser-react";
+import { describe, expect, it } from "vitest";
+import App from "./App";
 
-describe('Mobile ordering app user flows', () => {
-    it('renders the header and full menu in the initial browsing state', async () => {
-        await render(<App />);
+describe("Mobile ordering app user flows", () => {
+  it("renders the header and full menu in the initial browsing state", async () => {
+    await render(<App />);
 
-        await expect
-            .element(
-                page.getByRole('img', {
-                    name: "Jimmy's Diner - The best burgers and pizzas in town.",
-                })
-            )
-            .toBeVisible();
+    await expect
+      .element(
+        page.getByRole("img", {
+          name: "Jimmy's Diner - The best burgers and pizzas in town.",
+        }),
+      )
+      .toBeVisible();
 
-        await expect.element(page.getByRole('heading', { name: 'Pizza' })).toBeVisible();
-        await expect
-            .element(page.getByText('pepperoni, mushroom, mozzarella, salami, garlic'))
-            .toBeVisible();
+    await expect
+      .element(page.getByRole("heading", { name: "Pizza" }))
+      .toBeVisible();
+    await expect
+      .element(
+        page.getByText("pepperoni, mushroom, mozzarella, salami, garlic"),
+      )
+      .toBeVisible();
 
-        await expect.element(page.getByRole('heading', { name: 'Hamburger' })).toBeVisible();
-        await expect.element(page.getByText('beef, cheese, lettuce')).toBeVisible();
+    await expect
+      .element(page.getByRole("heading", { name: "Hamburger" }))
+      .toBeVisible();
+    await expect.element(page.getByText("beef, cheese, lettuce")).toBeVisible();
 
-        await expect.element(page.getByRole('heading', { name: 'Beer' })).toBeVisible();
-        await expect.element(page.getByText('grain, hops, yeast, water')).toBeVisible();
+    await expect
+      .element(page.getByRole("heading", { name: "Beer" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByText("grain, hops, yeast, water"))
+      .toBeVisible();
 
-        await expect.element(
-            page.getByRole('region', { name: 'Pizza' }).getByText('$14')
-        ).toBeVisible();
+    await expect
+      .element(page.getByRole("region", { name: "Pizza" }).getByText("$14"))
+      .toBeVisible();
 
-        await expect.element(
-            page.getByRole('region', { name: 'Hamburger' }).getByText('$12')
-        ).toBeVisible();
+    await expect
+      .element(page.getByRole("region", { name: "Hamburger" }).getByText("$12"))
+      .toBeVisible();
 
-        await expect.element(
-            page.getByRole('region', { name: 'Beer' }).getByText('$12')
-        ).toBeVisible();
+    await expect
+      .element(page.getByRole("region", { name: "Beer" }).getByText("$12"))
+      .toBeVisible();
 
-        await expect
-            .element(page.getByRole('heading', { name: 'Your order' }))
-            .not.toBeInTheDocument();
-        await expect
-            .element(page.getByText(/Thanks, .*! Your order is on its way!/))
-            .not.toBeInTheDocument();
-        await expect
-            .element(page.getByRole('button', { name: "Complete order"}))
-            .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByText(/Thanks, .*! Your order is on its way!/))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "Complete order" }))
+      .not.toBeInTheDocument();
+  });
+
+  it("lets a user add items, adjust quantities, remove items, and disables checkout when empty", async () => {
+    const { container } = await render(<App />);
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .toBeVisible();
+    await expect.element(page.getByText("x1")).toBeVisible();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$14");
+
+    // Increase quantity from the order row and from the menu item button
+    await page.getByRole("button", { name: "Increase Pizza quantity" }).click();
+    await expect.element(page.getByText("x2")).toBeVisible();
+    await expect
+      .element(container.querySelector(".order-item-container .order-price"))
+      .toHaveTextContent("$28");
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await expect.element(page.getByText("x3")).toBeVisible();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$42");
+
+    // Add another item and verify combined total
+    await page.getByRole("button", { name: "Add Beer to order" }).click();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$54");
+
+    // Decrease Beer from x1 to 0 removes it from the order
+    await page.getByRole("button", { name: "Decrease Beer quantity" }).click();
+    await expect
+      .element(page.getByRole("button", { name: "Remove Beer from order" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$42");
+
+    // Remove Pizza completely regardless of quantity
+    await page.getByRole("button", { name: "Remove Pizza from order" }).click();
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$0");
+    await expect
+      .element(page.getByRole("button", { name: "Complete order" }))
+      .toBeDisabled();
+  });
+
+  it("combines multiple distinct items and restores saved cart across reload", async () => {
+    const firstRender = await render(<App />);
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Add Hamburger to order" }).click();
+    await page.getByRole("button", { name: "Add Beer to order" }).click();
+
+    await expect
+      .element(firstRender.container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$38");
+
+    await firstRender.unmount();
+
+    // Simulate a page reload by mounting a fresh App instance with persisted localStorage
+    const reloadedRender = await render(<App />);
+
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("button", { name: "Remove Pizza from order" }))
+      .toBeVisible();
+    await expect
+      .element(
+        page.getByRole("button", { name: "Remove Hamburger from order" }),
+      )
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("button", { name: "Remove Beer from order" }))
+      .toBeVisible();
+    await expect
+      .element(reloadedRender.container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$38");
+  });
+
+  it("opens and dismisses the payment modal via close button, Escape key, and backdrop click without losing the order", async () => {
+    const { container } = await render(<App />);
+
+    await page.getByRole("button", { name: "Add Hamburger to order" }).click();
+
+    // Dismiss via close button
+    await page.getByRole("button", { name: "Complete order" }).click();
+    const modalHeading = page.getByRole("heading", {
+      name: "Enter card details",
+      includeHidden: true,
     });
+    await expect.element(modalHeading).toBeVisible();
 
-    it('lets a user add items, adjust quantities, remove items, and disables checkout when empty', async () => {
-        const { container } = await render(<App />);
+    await page.getByRole("button", { name: "Close payment modal" }).click();
+    await expect.element(modalHeading).not.toBeVisible();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$12");
 
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
+    // Dismiss via Escape key
+    await page.getByRole("button", { name: "Complete order" }).click();
+    await expect.element(modalHeading).toBeVisible();
 
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).toBeVisible();
-        await expect.element(page.getByText('x1')).toBeVisible();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$14');
+    await userEvent.keyboard("{Escape}");
+    await expect.element(modalHeading).not.toBeVisible();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$12");
 
-        // Increase quantity from the order row and from the menu item button
-        await page.getByRole('button', { name: 'Increase Pizza quantity' }).click();
-        await expect.element(page.getByText('x2')).toBeVisible();
-        await expect
-            .element(container.querySelector('.order-item-container .order-price'))
-            .toHaveTextContent('$28');
+    // Dismiss via backdrop click outside the dialog box
+    await page.getByRole("button", { name: "Complete order" }).click();
+    await expect.element(modalHeading).toBeVisible();
 
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await expect.element(page.getByText('x3')).toBeVisible();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$42');
+    await userEvent.pointer({ coords: { x: 5, y: 5 }, keys: "[MouseLeft]" });
+    await expect.element(modalHeading).not.toBeVisible();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$12");
+  });
 
-        // Add another item and verify combined total
-        await page.getByRole('button', { name: 'Add Beer to order' }).click();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$54');
+  it("preserves entered payment form inputs when the modal is closed without submitting", async () => {
+    await render(<App />);
 
-        // Decrease Beer from x1 to 0 removes it from the order
-        await page.getByRole('button', { name: 'Decrease Beer quantity' }).click();
-        await expect
-            .element(page.getByRole('button', { name: 'Remove Beer from order' }))
-            .not.toBeInTheDocument();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$42');
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Complete order" }).click();
 
-        // Remove Pizza completely regardless of quantity
-        await page.getByRole('button', { name: 'Remove Pizza from order' }).click();
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$0');
-        await expect
-            .element(page.getByRole('button', { name: 'Complete order' }))
-            .toBeDisabled();
+    const modalHeading = page.getByRole("heading", {
+      name: "Enter card details",
+      includeHidden: true,
     });
+    await expect.element(modalHeading).toBeVisible();
 
-    it('combines multiple distinct items and restores saved cart across reload', async () => {
-        const firstRender = await render(<App />);
+    await userEvent.fill(page.getByLabelText("Full name"), "Alex");
+    await userEvent.fill(page.getByLabelText("Card number"), "12345678");
+    await userEvent.fill(page.getByLabelText("CVV"), "123");
 
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Add Hamburger to order' }).click();
-        await page.getByRole('button', { name: 'Add Beer to order' }).click();
+    await page.getByRole("button", { name: "Close payment modal" }).click();
+    await expect.element(modalHeading).not.toBeVisible();
 
-        await expect
-            .element(firstRender.container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$38');
+    await page.getByRole("button", { name: "Complete order" }).click();
+    await expect.element(modalHeading).toBeVisible();
 
-        await firstRender.unmount();
+    await expect.element(page.getByLabelText("Full name")).toHaveValue("Alex");
+    await expect
+      .element(page.getByLabelText("Card number"))
+      .toHaveValue("12345678");
+    await expect.element(page.getByLabelText("CVV")).toHaveValue("123");
 
-        // Simulate a page reload by mounting a fresh App instance with persisted localStorage
-        const reloadedRender = await render(<App />);
+    await userEvent.keyboard("{Escape}");
+    await expect.element(modalHeading).not.toBeVisible();
 
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).toBeVisible();
-        await expect
-            .element(page.getByRole('button', { name: 'Remove Pizza from order' }))
-            .toBeVisible();
-        await expect
-            .element(page.getByRole('button', { name: 'Remove Hamburger from order' }))
-            .toBeVisible();
-        await expect
-            .element(page.getByRole('button', { name: 'Remove Beer from order' }))
-            .toBeVisible();
-        await expect
-            .element(reloadedRender.container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$38');
+    await page.getByRole("button", { name: "Complete order" }).click();
+    await expect.element(modalHeading).toBeVisible();
+
+    await expect.element(page.getByLabelText("Full name")).toHaveValue("Alex");
+    await expect
+      .element(page.getByLabelText("Card number"))
+      .toHaveValue("12345678");
+    await expect.element(page.getByLabelText("CVV")).toHaveValue("123");
+  });
+
+  it("sanitizes non-digit input and enforces browser form validation on payment fields", async () => {
+    const { container } = await render(<App />);
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Complete order" }).click();
+
+    const nameInput = page.getByLabelText("Full name");
+    const cardInput = page.getByLabelText("Card number");
+    const cvvInput = page.getByLabelText("CVV");
+    const payButton = page.getByRole("button", { name: "Pay" });
+
+    // Empty submission is blocked by required attributes
+    await payButton.click();
+    await expect
+      .element(page.getByRole("heading", { name: "Enter card details" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByText(/Thanks, .*! Your order is on its way!/))
+      .not.toBeInTheDocument();
+
+    // Non-digit characters are stripped from card number and CVV
+    await userEvent.type(nameInput, "Alex");
+    await userEvent.type(cardInput, "1234-ab!56");
+    await userEvent.type(cvvInput, "1a2");
+
+    await expect.element(cardInput).toHaveValue("123456");
+    await expect.element(cvvInput).toHaveValue("12");
+
+    // Too-short card number (< 8 digits) and CVV (< 3 digits) fail native validation
+    const paymentForm = container.querySelector("#payment-form");
+    expect(paymentForm.checkValidity()).toBe(false);
+
+    await payButton.click();
+    await expect
+      .element(page.getByRole("heading", { name: "Enter card details" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByText(/Thanks, .*! Your order is on its way!/))
+      .not.toBeInTheDocument();
+  });
+
+  it("completes payment, clears the cart, shows thank you message, and allows starting a new order", async () => {
+    const { container } = await render(<App />);
+
+    await page.getByRole("button", { name: "Add Hamburger to order" }).click();
+    await page.getByRole("button", { name: "Complete order" }).click();
+
+    await expect
+      .element(page.getByRole("heading", { name: "Enter card details" }))
+      .toBeVisible();
+
+    await userEvent.fill(page.getByLabelText("Full name"), "  Alex  ");
+    await userEvent.fill(
+      page.getByLabelText("Card number"),
+      "1234567812345678",
+    );
+    await userEvent.fill(page.getByLabelText("CVV"), "123");
+    await page.getByRole("button", { name: "Pay" }).click();
+
+    await expect
+      .element(
+        page.getByRole("heading", {
+          name: "Enter card details",
+          includeHidden: true,
+        }),
+      )
+      .not.toBeVisible();
+    await expect
+      .element(page.getByText("Thanks, Alex! Your order is on its way!"))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .not.toBeInTheDocument();
+    expect(
+      JSON.parse(localStorage.getItem("mobile-ordering-app:cart")),
+    ).toEqual([]);
+
+    // Starting a new order replaces the thank-you message with a fresh cart
+    await page.getByRole("button", { name: "Add Beer to order" }).click();
+
+    await expect
+      .element(page.getByText("Thanks, Alex! Your order is on its way!"))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .toBeVisible();
+    await expect.element(page.getByText("x1")).toBeVisible();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$12");
+  });
+
+  it("keeps the payment modal open when clicking inside the dialog", async () => {
+    await render(<App />);
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Complete order" }).click();
+
+    const modalHeading = page.getByRole("heading", {
+      name: "Enter card details",
     });
+    await expect.element(modalHeading).toBeVisible();
 
-    it('opens and dismisses the payment modal via close button, Escape key, and backdrop click without losing the order', async () => {
-        const { container } = await render(<App />);
+    await modalHeading.click();
+    await expect.element(modalHeading).toBeVisible();
+  });
 
-        await page.getByRole('button', { name: 'Add Hamburger to order' }).click();
+  it("enforces maxLength limits and accepts minimum valid card and CVV lengths", async () => {
+    await render(<App />);
 
-        // Dismiss via close button
-        await page.getByRole('button', { name: 'Complete order' }).click();
-        const modalHeading = page.getByRole('heading', {
-            name: 'Enter card details',
-            includeHidden: true,
-        });
-        await expect.element(modalHeading).toBeVisible();
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Complete order" }).click();
 
-        await page.getByRole('button', { name: 'Close payment modal' }).click();
-        await expect.element(modalHeading).not.toBeVisible();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$12');
+    const nameInput = page.getByLabelText("Full name");
+    const cardInput = page.getByLabelText("Card number");
+    const cvvInput = page.getByLabelText("CVV");
 
-        // Dismiss via Escape key
-        await page.getByRole('button', { name: 'Complete order' }).click();
-        await expect.element(modalHeading).toBeVisible();
+    await userEvent.type(cardInput, "1234567890123456789012");
+    await userEvent.type(cvvInput, "12345");
 
-        await userEvent.keyboard('{Escape}');
-        await expect.element(modalHeading).not.toBeVisible();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$12');
+    await expect.element(cardInput).toHaveValue("1234567890123456789");
+    await expect.element(cvvInput).toHaveValue("1234");
 
-        // Dismiss via backdrop click outside the dialog box
-        await page.getByRole('button', { name: 'Complete order' }).click();
-        await expect.element(modalHeading).toBeVisible();
+    // Minimum valid lengths (8-digit card, 3-digit CVV) submit successfully
+    await userEvent.fill(nameInput, "Sam");
+    await userEvent.fill(cardInput, "12345678");
+    await userEvent.fill(cvvInput, "123");
+    await page.getByRole("button", { name: "Pay" }).click();
 
-        await userEvent.pointer({ coords: { x: 5, y: 5 }, keys: '[MouseLeft]' });
-        await expect.element(modalHeading).not.toBeVisible();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$12');
+    await expect
+      .element(page.getByText("Thanks, Sam! Your order is on its way!"))
+      .toBeVisible();
+  });
+
+  it("resets payment form inputs after submission so a subsequent order starts with an empty form", async () => {
+    await render(<App />);
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Complete order" }).click();
+
+    await userEvent.fill(page.getByLabelText("Full name"), "Alex");
+    await userEvent.fill(page.getByLabelText("Card number"), "12345678");
+    await userEvent.fill(page.getByLabelText("CVV"), "123");
+    await page.getByRole("button", { name: "Pay" }).click();
+
+    await expect
+      .element(page.getByText("Thanks, Alex! Your order is on its way!"))
+      .toBeVisible();
+
+    await page.getByRole("button", { name: "Add Beer to order" }).click();
+    await page.getByRole("button", { name: "Complete order" }).click();
+
+    await expect.element(page.getByLabelText("Full name")).toHaveValue("");
+    await expect.element(page.getByLabelText("Card number")).toHaveValue("");
+    await expect.element(page.getByLabelText("CVV")).toHaveValue("");
+  });
+
+  it("re-enables checkout when an item is added after emptying the order", async () => {
+    const { container } = await render(<App />);
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Remove Pizza from order" }).click();
+
+    const completeOrderBtn = page.getByRole("button", {
+      name: "Complete order",
     });
-
-    it('preserves entered payment form inputs when the modal is closed without submitting', async () => {
-        await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Complete order' }).click();
-
-        const modalHeading = page.getByRole('heading', {
-            name: 'Enter card details',
-            includeHidden: true,
-        });
-        await expect.element(modalHeading).toBeVisible();
-
-        await userEvent.fill(page.getByLabelText('Full name'), 'Alex');
-        await userEvent.fill(page.getByLabelText('Card number'), '12345678');
-        await userEvent.fill(page.getByLabelText('CVV'), '123');
-
-        await page.getByRole('button', { name: 'Close payment modal' }).click();
-        await expect.element(modalHeading).not.toBeVisible();
-
-        await page.getByRole('button', { name: 'Complete order' }).click();
-        await expect.element(modalHeading).toBeVisible();
-
-        await expect.element(page.getByLabelText('Full name')).toHaveValue('Alex');
-        await expect.element(page.getByLabelText('Card number')).toHaveValue('12345678');
-        await expect.element(page.getByLabelText('CVV')).toHaveValue('123');
-
-        await userEvent.keyboard('{Escape}');
-        await expect.element(modalHeading).not.toBeVisible();
-
-        await page.getByRole('button', { name: 'Complete order' }).click();
-        await expect.element(modalHeading).toBeVisible();
-
-        await expect.element(page.getByLabelText('Full name')).toHaveValue('Alex');
-        await expect.element(page.getByLabelText('Card number')).toHaveValue('12345678');
-        await expect.element(page.getByLabelText('CVV')).toHaveValue('123');
-    });
-
-    it('sanitizes non-digit input and enforces browser form validation on payment fields', async () => {
-        const { container } = await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Complete order' }).click();
-
-        const nameInput = page.getByLabelText('Full name');
-        const cardInput = page.getByLabelText('Card number');
-        const cvvInput = page.getByLabelText('CVV');
-        const payButton = page.getByRole('button', { name: 'Pay' });
-
-        // Empty submission is blocked by required attributes
-        await payButton.click();
-        await expect
-            .element(page.getByRole('heading', { name: 'Enter card details' }))
-            .toBeVisible();
-        await expect
-            .element(page.getByText(/Thanks, .*! Your order is on its way!/))
-            .not.toBeInTheDocument();
-
-        // Non-digit characters are stripped from card number and CVV
-        await userEvent.type(nameInput, 'Alex');
-        await userEvent.type(cardInput, '1234-ab!56');
-        await userEvent.type(cvvInput, '1a2');
-
-        await expect.element(cardInput).toHaveValue('123456');
-        await expect.element(cvvInput).toHaveValue('12');
-
-        // Too-short card number (< 8 digits) and CVV (< 3 digits) fail native validation
-        const paymentForm = container.querySelector('#payment-form');
-        expect(paymentForm.checkValidity()).toBe(false);
-
-        await payButton.click();
-        await expect
-            .element(page.getByRole('heading', { name: 'Enter card details' }))
-            .toBeVisible();
-        await expect
-            .element(page.getByText(/Thanks, .*! Your order is on its way!/))
-            .not.toBeInTheDocument();
-    });
-
-    it('completes payment, clears the cart, shows thank you message, and allows starting a new order', async () => {
-        const { container } = await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Hamburger to order' }).click();
-        await page.getByRole('button', { name: 'Complete order' }).click();
-
-        await expect
-            .element(page.getByRole('heading', { name: 'Enter card details' }))
-            .toBeVisible();
-
-        await userEvent.fill(page.getByLabelText('Full name'), '  Alex  ');
-        await userEvent.fill(page.getByLabelText('Card number'), '1234567812345678');
-        await userEvent.fill(page.getByLabelText('CVV'), '123');
-        await page.getByRole('button', { name: 'Pay' }).click();
-
-        await expect
-            .element(page.getByRole('heading', { name: 'Enter card details', includeHidden: true }))
-            .not.toBeVisible();
-        await expect
-            .element(page.getByText('Thanks, Alex! Your order is on its way!'))
-            .toBeVisible();
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
-        expect(JSON.parse(localStorage.getItem('mobile-ordering-app:cart'))).toEqual([]);
-
-        // Starting a new order replaces the thank-you message with a fresh cart
-        await page.getByRole('button', { name: 'Add Beer to order' }).click();
-
-        await expect
-            .element(page.getByText('Thanks, Alex! Your order is on its way!'))
-            .not.toBeInTheDocument();
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).toBeVisible();
-        await expect.element(page.getByText('x1')).toBeVisible();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$12');
-    });
-
-    it('keeps the payment modal open when clicking inside the dialog', async () => {
-        await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Complete order' }).click();
-
-        const modalHeading = page.getByRole('heading', { name: 'Enter card details' });
-        await expect.element(modalHeading).toBeVisible();
-
-        await modalHeading.click();
-        await expect.element(modalHeading).toBeVisible();
-    });
-
-    it('enforces maxLength limits and accepts minimum valid card and CVV lengths', async () => {
-        await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Complete order' }).click();
-
-        const nameInput = page.getByLabelText('Full name');
-        const cardInput = page.getByLabelText('Card number');
-        const cvvInput = page.getByLabelText('CVV');
-
-        await userEvent.type(cardInput, '1234567890123456789012');
-        await userEvent.type(cvvInput, '12345');
-
-        await expect.element(cardInput).toHaveValue('1234567890123456789');
-        await expect.element(cvvInput).toHaveValue('1234');
-
-        // Minimum valid lengths (8-digit card, 3-digit CVV) submit successfully
-        await userEvent.fill(nameInput, 'Sam');
-        await userEvent.fill(cardInput, '12345678');
-        await userEvent.fill(cvvInput, '123');
-        await page.getByRole('button', { name: 'Pay' }).click();
-
-        await expect
-            .element(page.getByText('Thanks, Sam! Your order is on its way!'))
-            .toBeVisible();
-    });
-
-    it('resets payment form inputs after submission so a subsequent order starts with an empty form', async () => {
-        await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Complete order' }).click();
-
-        await userEvent.fill(page.getByLabelText('Full name'), 'Alex');
-        await userEvent.fill(page.getByLabelText('Card number'), '12345678');
-        await userEvent.fill(page.getByLabelText('CVV'), '123');
-        await page.getByRole('button', { name: 'Pay' }).click();
-
-        await expect
-            .element(page.getByText('Thanks, Alex! Your order is on its way!'))
-            .toBeVisible();
-
-        await page.getByRole('button', { name: 'Add Beer to order' }).click();
-        await page.getByRole('button', { name: 'Complete order' }).click();
-
-        await expect.element(page.getByLabelText('Full name')).toHaveValue('');
-        await expect.element(page.getByLabelText('Card number')).toHaveValue('');
-        await expect.element(page.getByLabelText('CVV')).toHaveValue('');
-    });
-
-    it('re-enables checkout when an item is added after emptying the order', async () => {
-        const { container } = await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Remove Pizza from order' }).click();
-
-        const completeOrderBtn = page.getByRole('button', { name: 'Complete order' });
-        await expect.element(completeOrderBtn).toBeDisabled();
-
-        await page.getByRole('button', { name: 'Add Hamburger to order' }).click();
-        await expect.element(completeOrderBtn).toBeEnabled();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$12');
-    });
-
-    it('renders initial browsing state cleanly when localStorage has corrupted or unknown-only cart data', async () => {
-        localStorage.setItem('mobile-ordering-app:cart', '{invalid-json');
-        const corruptedRender = await render(<App />);
-
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
-        await expect.element(page.getByRole('button', { name: 'Complete order' })).not.toBeInTheDocument();
-        await corruptedRender.unmount();
-
-        localStorage.setItem(
-            'mobile-ordering-app:cart',
-            JSON.stringify([{ itemId: 999, quantity: 2 }])
-        );
-        await render(<App />);
-
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
-        await expect.element(page.getByRole('button', { name: 'Complete order' })).not.toBeInTheDocument();
-    });
-
-    it('rejects whitespace-only name submission and keeps the order intact', async () => {
-        const { container } = await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Complete order' }).click();
-
-        await userEvent.fill(page.getByLabelText('Full name'), '   ');
-        await userEvent.fill(page.getByLabelText('Card number'), '12345678');
-        await userEvent.fill(page.getByLabelText('CVV'), '123');
-
-        const paymentForm = container.querySelector('#payment-form');
-        expect(paymentForm.checkValidity()).toBe(false);
-
-        await page.getByRole('button', { name: 'Pay' }).click();
-
-        await expect
-            .element(page.getByRole('heading', { name: 'Enter card details' }))
-            .toBeVisible();
-        await expect
-            .element(page.getByText(/Thanks, .*! Your order is on its way!/))
-            .not.toBeInTheDocument();
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$14');
-    });
-
-    it('completes checkout for a cart restored from localStorage', async () => {
-        localStorage.setItem(
-            'mobile-ordering-app:cart',
-            JSON.stringify([{ itemId: 0, quantity: 2 }])
-        );
-
-        await render(<App />);
-
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).toBeVisible();
-        await expect.element(page.getByText('x2')).toBeVisible();
-
-        await page.getByRole('button', { name: 'Complete order' }).click();
-        await userEvent.fill(page.getByLabelText('Full name'), 'Jordan');
-        await userEvent.fill(page.getByLabelText('Card number'), '12345678');
-        await userEvent.fill(page.getByLabelText('CVV'), '123');
-        await page.getByRole('button', { name: 'Pay' }).click();
-
-        await expect
-            .element(page.getByText('Thanks, Jordan! Your order is on its way!'))
-            .toBeVisible();
-        await expect.element(page.getByRole('heading', { name: 'Your order' })).not.toBeInTheDocument();
-        await expect
-            .poll(() => JSON.parse(localStorage.getItem('mobile-ordering-app:cart')))
-            .toEqual([]);
-    });
-
-    it('adjusts one item quantity without affecting other items in a multi-item order', async () => {
-        const { container } = await render(<App />);
-
-        await page.getByRole('button', { name: 'Add Pizza to order' }).click();
-        await page.getByRole('button', { name: 'Add Hamburger to order' }).click();
-        await page.getByRole('button', { name: 'Increase Pizza quantity' }).click();
-
-        const orderRows = container.querySelectorAll('.order-item-container');
-        expect(orderRows).toHaveLength(2);
-        await expect.element(orderRows[0].querySelector('.order-item')).toHaveTextContent('Pizza x2');
-        await expect.element(orderRows[0].querySelector('.order-price')).toHaveTextContent('$28');
-        await expect.element(orderRows[1].querySelector('.order-item')).toHaveTextContent('Hamburger x1');
-        await expect.element(orderRows[1].querySelector('.order-price')).toHaveTextContent('$12');
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$40');
-
-        await page.getByRole('button', { name: 'Decrease Pizza quantity' }).click();
-        await expect.element(orderRows[0].querySelector('.order-item')).toHaveTextContent('Pizza x1');
-        await expect.element(orderRows[0].querySelector('.order-price')).toHaveTextContent('$14');
-        await expect.element(orderRows[1].querySelector('.order-item')).toHaveTextContent('Hamburger x1');
-        await expect.element(orderRows[1].querySelector('.order-price')).toHaveTextContent('$12');
-        await expect
-            .element(container.querySelector('.total-price-container'))
-            .toHaveTextContent('Total price:$26');
-    });
+    await expect.element(completeOrderBtn).toBeDisabled();
+
+    await page.getByRole("button", { name: "Add Hamburger to order" }).click();
+    await expect.element(completeOrderBtn).toBeEnabled();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$12");
+  });
+
+  it("renders initial browsing state cleanly when localStorage has corrupted or unknown-only cart data", async () => {
+    localStorage.setItem("mobile-ordering-app:cart", "{invalid-json");
+    const corruptedRender = await render(<App />);
+
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "Complete order" }))
+      .not.toBeInTheDocument();
+    await corruptedRender.unmount();
+
+    localStorage.setItem(
+      "mobile-ordering-app:cart",
+      JSON.stringify([{ itemId: 999, quantity: 2 }]),
+    );
+    await render(<App />);
+
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "Complete order" }))
+      .not.toBeInTheDocument();
+  });
+
+  it("rejects whitespace-only name submission and keeps the order intact", async () => {
+    const { container } = await render(<App />);
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Complete order" }).click();
+
+    await userEvent.fill(page.getByLabelText("Full name"), "   ");
+    await userEvent.fill(page.getByLabelText("Card number"), "12345678");
+    await userEvent.fill(page.getByLabelText("CVV"), "123");
+
+    const paymentForm = container.querySelector("#payment-form");
+    expect(paymentForm.checkValidity()).toBe(false);
+
+    await page.getByRole("button", { name: "Pay" }).click();
+
+    await expect
+      .element(page.getByRole("heading", { name: "Enter card details" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByText(/Thanks, .*! Your order is on its way!/))
+      .not.toBeInTheDocument();
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$14");
+  });
+
+  it("completes checkout for a cart restored from localStorage", async () => {
+    localStorage.setItem(
+      "mobile-ordering-app:cart",
+      JSON.stringify([{ itemId: 0, quantity: 2 }]),
+    );
+
+    await render(<App />);
+
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .toBeVisible();
+    await expect.element(page.getByText("x2")).toBeVisible();
+
+    await page.getByRole("button", { name: "Complete order" }).click();
+    await userEvent.fill(page.getByLabelText("Full name"), "Jordan");
+    await userEvent.fill(page.getByLabelText("Card number"), "12345678");
+    await userEvent.fill(page.getByLabelText("CVV"), "123");
+    await page.getByRole("button", { name: "Pay" }).click();
+
+    await expect
+      .element(page.getByText("Thanks, Jordan! Your order is on its way!"))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("heading", { name: "Your order" }))
+      .not.toBeInTheDocument();
+    await expect
+      .poll(() => JSON.parse(localStorage.getItem("mobile-ordering-app:cart")))
+      .toEqual([]);
+  });
+
+  it("adjusts one item quantity without affecting other items in a multi-item order", async () => {
+    const { container } = await render(<App />);
+
+    await page.getByRole("button", { name: "Add Pizza to order" }).click();
+    await page.getByRole("button", { name: "Add Hamburger to order" }).click();
+    await page.getByRole("button", { name: "Increase Pizza quantity" }).click();
+
+    const orderRows = container.querySelectorAll(".order-item-container");
+    expect(orderRows).toHaveLength(2);
+    await expect
+      .element(orderRows[0].querySelector(".order-item"))
+      .toHaveTextContent("Pizza x2");
+    await expect
+      .element(orderRows[0].querySelector(".order-price"))
+      .toHaveTextContent("$28");
+    await expect
+      .element(orderRows[1].querySelector(".order-item"))
+      .toHaveTextContent("Hamburger x1");
+    await expect
+      .element(orderRows[1].querySelector(".order-price"))
+      .toHaveTextContent("$12");
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$40");
+
+    await page.getByRole("button", { name: "Decrease Pizza quantity" }).click();
+    await expect
+      .element(orderRows[0].querySelector(".order-item"))
+      .toHaveTextContent("Pizza x1");
+    await expect
+      .element(orderRows[0].querySelector(".order-price"))
+      .toHaveTextContent("$14");
+    await expect
+      .element(orderRows[1].querySelector(".order-item"))
+      .toHaveTextContent("Hamburger x1");
+    await expect
+      .element(orderRows[1].querySelector(".order-price"))
+      .toHaveTextContent("$12");
+    await expect
+      .element(container.querySelector(".total-price-container"))
+      .toHaveTextContent("Total price:$26");
+  });
 });

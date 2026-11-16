@@ -1,110 +1,117 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-const CART_STORAGE_KEY = 'mobile-ordering-app:cart';
+const CART_STORAGE_KEY = "mobile-ordering-app:cart";
 
 function loadCartFromStorage() {
-    try {
-        const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-        if (!savedCart) return [];
-        const parsed = JSON.parse(savedCart);
-        if (!Array.isArray(parsed)) return [];
-        const deduplicated = new Map();
-        for (const item of parsed) {
-            if (
-                item &&
-                item.itemId != null &&
-                Number.isInteger(item.quantity) &&
-                item.quantity > 0
-            ) {
-                deduplicated.set(
-                    item.itemId,
-                    item.quantity
-                );
-            }
-        }
-        return Array.from(deduplicated, ([itemId, quantity]) => ({ itemId, quantity }));
-    } catch {
-        return [];
+  try {
+    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+    if (!savedCart) return [];
+    const parsed = JSON.parse(savedCart);
+    if (!Array.isArray(parsed)) return [];
+    const deduplicated = new Map();
+    for (const item of parsed) {
+      if (
+        item &&
+        item.itemId != null &&
+        Number.isInteger(item.quantity) &&
+        item.quantity > 0
+      ) {
+        deduplicated.set(item.itemId, item.quantity);
+      }
     }
+    return Array.from(deduplicated, ([itemId, quantity]) => ({
+      itemId,
+      quantity,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export function useCart(menuItems) {
-    const [cart, setCart] = useState(loadCartFromStorage);
+  const [cart, setCart] = useState(loadCartFromStorage);
 
-    useEffect(() => {
-        try {
-            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-        } catch {
-            // Ignore storage errors (e.g. private browsing or full quota)
-        }
-    }, [cart]);
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch {
+      // Ignore storage errors (e.g. private browsing or full quota)
+    }
+  }, [cart]);
 
-    const menuItemsById = useMemo(
-        () => new Map(menuItems.map(item => [item.id, item])),
-        [menuItems]
-    );
+  const menuItemsById = useMemo(
+    () => new Map(menuItems.map((item) => [item.id, item])),
+    [menuItems],
+  );
 
-    const addToCart = useCallback(itemId => {
-        if (!menuItemsById.has(itemId)) return;
-        setCart(prevCart => {
-            const existingItem = prevCart.find(cartItem => cartItem.itemId === itemId);
-            if (existingItem) {
-                return prevCart.map(cartItem =>
-                    cartItem.itemId === itemId
-                        ? { ...cartItem, quantity: cartItem.quantity + 1 }
-                        : cartItem
-                );
-            }
-            return [...prevCart, { itemId, quantity: 1 }];
-        });
-    }, [menuItemsById]);
-
-    const decrementItem = useCallback(itemId => {
-        setCart(prevCart =>
-            prevCart
-                .map(cartItem =>
-                    cartItem.itemId === itemId
-                        ? { ...cartItem, quantity: cartItem.quantity - 1 }
-                        : cartItem
-                )
-                .filter(cartItem => cartItem.quantity > 0)
+  const addToCart = useCallback(
+    (itemId) => {
+      if (!menuItemsById.has(itemId)) return;
+      setCart((prevCart) => {
+        const existingItem = prevCart.find(
+          (cartItem) => cartItem.itemId === itemId,
         );
-    }, []);
+        if (existingItem) {
+          return prevCart.map((cartItem) =>
+            cartItem.itemId === itemId
+              ? { ...cartItem, quantity: cartItem.quantity + 1 }
+              : cartItem,
+          );
+        }
+        return [...prevCart, { itemId, quantity: 1 }];
+      });
+    },
+    [menuItemsById],
+  );
 
-    const removeFromCart = useCallback(itemId => {
-        setCart(prevCart => prevCart.filter(cartItem => cartItem.itemId !== itemId));
-    }, []);
-
-    const clearCart = useCallback(() => {
-        setCart([]);
-    }, []);
-
-    const orderedItems = useMemo(
-        () =>
-            cart.reduce((items, cartItem) => {
-                const menuItem = menuItemsById.get(cartItem.itemId);
-                if (!menuItem) return items;
-                items.push({
-                    ...menuItem,
-                    quantity: cartItem.quantity,
-                    subtotal: menuItem.price * cartItem.quantity,
-                });
-                return items;
-            }, []),
-        [cart, menuItemsById]
+  const decrementItem = useCallback((itemId) => {
+    setCart((prevCart) =>
+      prevCart
+        .map((cartItem) =>
+          cartItem.itemId === itemId
+            ? { ...cartItem, quantity: cartItem.quantity - 1 }
+            : cartItem,
+        )
+        .filter((cartItem) => cartItem.quantity > 0),
     );
+  }, []);
 
-    const totalPrice = useMemo(
-        () => orderedItems.reduce((total, item) => total + item.subtotal, 0),
-        [orderedItems]
+  const removeFromCart = useCallback((itemId) => {
+    setCart((prevCart) =>
+      prevCart.filter((cartItem) => cartItem.itemId !== itemId),
     );
+  }, []);
 
-    return {
-        orderedItems,
-        totalPrice,
-        addToCart,
-        decrementItem,
-        removeFromCart,
-        clearCart,
-    };
+  const clearCart = useCallback(() => {
+    setCart([]);
+  }, []);
+
+  const orderedItems = useMemo(
+    () =>
+      cart.reduce((items, cartItem) => {
+        const menuItem = menuItemsById.get(cartItem.itemId);
+        if (!menuItem) return items;
+        items.push({
+          ...menuItem,
+          quantity: cartItem.quantity,
+          subtotal: menuItem.price * cartItem.quantity,
+        });
+        return items;
+      }, []),
+    [cart, menuItemsById],
+  );
+
+  const totalPrice = useMemo(
+    () => orderedItems.reduce((total, item) => total + item.subtotal, 0),
+    [orderedItems],
+  );
+
+  return {
+    orderedItems,
+    totalPrice,
+    addToCart,
+    decrementItem,
+    removeFromCart,
+    clearCart,
+  };
 }

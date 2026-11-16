@@ -1,309 +1,309 @@
 @font-face {
-    font-family: 'Inter';
-    font-display: swap;
-    font-weight: 100 900;
-    src: url('./assets/fonts/Inter-VariableFont.woff2') format('woff2');
+  font-family: "Inter";
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./assets/fonts/Inter-VariableFont.woff2") format("woff2");
 }
 
 @font-face {
-    font-family: 'Smythe';
-    font-display: swap;
-    font-weight: 400;
-    src: url('./assets/fonts/Smythe-Regular.woff2') format('woff2');
+  font-family: "Smythe";
+  font-display: swap;
+  font-weight: 400;
+  src: url("./assets/fonts/Smythe-Regular.woff2") format("woff2");
 }
 
 body {
-    margin: 0;
-    font-weight: 400;
-    font-family: 'Smythe', cursive, serif;
-} 
+  margin: 0;
+  font-weight: 400;
+  font-family: "Smythe", cursive, serif;
+}
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 button:disabled {
-    cursor: not-allowed;
-    background: #ddd;
+  cursor: not-allowed;
+  background: #ddd;
 }
 
 header {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .header-img {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
 main {
-    padding: 22px 45px 30px 45px;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    box-sizing: border-box;
+  padding: 22px 45px 30px 45px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .menu-list,
 .order-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .menu-item {
-    margin-top: min(45px, 7.5vw);
-    border-bottom: 1px solid #d2d2d2;
-    display: flex;
-    padding-bottom: min(48px, 8vw);
+  margin-top: min(45px, 7.5vw);
+  border-bottom: 1px solid #d2d2d2;
+  display: flex;
+  padding-bottom: min(48px, 8vw);
 }
 
 .dish-icon {
-    font-family: 'Inter', sans-serif;
-    font-size: 78px;
+  font-family: "Inter", sans-serif;
+  font-size: 78px;
 }
 
 .menu-item-description {
-    margin-left: 30px;
+  margin-left: 30px;
 }
 
 .menu-item-title {
-    font-size: 28px;
-    margin: 0.1786em 0; /* 5px */
-    font-weight: 400;
+  font-size: 28px;
+  margin: 0.1786em 0; /* 5px */
+  font-weight: 400;
 }
 
 .ingredients {
-    margin-top: 0;
-    color: #8B8B8B;
-    font-size: 16px;
+  margin-top: 0;
+  color: #8b8b8b;
+  font-size: 16px;
 }
 
 .price {
-    margin: 0.5em 0 0;
-    font-size: 20px;
+  margin: 0.5em 0 0;
+  font-size: 20px;
 }
 
 .add-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 32px;
-    width: 50px;
-    height: 50px;
-    border: 1.5px solid #DEDEDE;
-    border-radius: 50%;
-    background: #fff;
-    font-weight: 200;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    margin: 15px 0 0 auto;
-    flex-shrink: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 32px;
+  width: 50px;
+  height: 50px;
+  border: 1.5px solid #dedede;
+  border-radius: 50%;
+  background: #fff;
+  font-weight: 200;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 15px 0 0 auto;
+  flex-shrink: 0;
 }
 
 .add-btn-text {
-    line-height: 0;
-    transform: translateY(-1px);
+  line-height: 0;
+  transform: translateY(-1px);
 }
 
 .order-title {
-    font-size: 28px;
-    text-align: center;
-    margin: 40px 0 45px 0;
+  font-size: 28px;
+  text-align: center;
+  margin: 40px 0 45px 0;
 }
 
 .order-item-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .order-item {
-    font-size: 28px;
+  font-size: 28px;
 }
 
 .order-quantity {
-    font-size: 20px;
-    color: #777;
+  font-size: 20px;
+  color: #777;
 }
 
 .quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .qty-btn {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 1px solid #dedede;
-    background: #fff;
-    font-size: 16px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #dedede;
+  background: #fff;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .qty-btn:hover {
-    border-color: #3c3c3c;
+  border-color: #3c3c3c;
 }
 
 .remove-btn {
-    font-size: 12px;
-    color: #bbb;
-    border: none;
-    background: #fff;
+  font-size: 12px;
+  color: #bbb;
+  border: none;
+  background: #fff;
 }
 
 .remove-btn:hover {
-    text-decoration-line: underline;
+  text-decoration-line: underline;
 }
 
 .order-price {
-    margin-left: auto;
-    font-size: 20px;
+  margin-left: auto;
+  font-size: 20px;
 }
 
 .order-hr {
-    border: 1px solid #000;
-    margin: 20px 0 10px 0;
+  border: 1px solid #000;
+  margin: 20px 0 10px 0;
 }
 
 .total-price-container {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .total-price {
-    font-size: 28px;
+  font-size: 28px;
 }
 
 .complete-order-btn {
-    height: 60px;
-    width: 100%;
-    border-radius: 3px;
-    border: none;
-    background: #16DB99;
-    font-size: 16px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #fff;
-    font-weight: 700;
-    margin-top: 45px;
+  height: 60px;
+  width: 100%;
+  border-radius: 3px;
+  border: none;
+  background: #16db99;
+  font-size: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #fff;
+  font-weight: 700;
+  margin-top: 45px;
 }
 
 .payment-modal {
-    box-shadow: 5.19px 5.19px 255.44px 0 #00000080;
-    width: 95%;
-    max-width: 524px;
-    box-sizing: border-box;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    border: none;
-    background: #fff;
-    border-radius: 4px;
-    padding: 0 24px 30px 24px;
+  box-shadow: 5.19px 5.19px 255.44px 0 #00000080;
+  width: 95%;
+  max-width: 524px;
+  box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  border: none;
+  background: #fff;
+  border-radius: 4px;
+  padding: 0 24px 30px 24px;
 }
 
 .payment-modal::backdrop {
-    background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .modal-close-btn {
-    position: absolute;
-    right: 6px;
-    top: 6px;
-    border: none;
-    background: #fff;
-    font-size: 30px;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  border: none;
+  background: #fff;
+  font-size: 30px;
 }
 
 .modal-close-btn:hover {
-    color: red;
+  color: red;
 }
 
 .modal-title {
-    font-size: 24px;
-    font-weight: 700;
-    text-align: center;
-    margin: 47px 0 46px 0;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin: 47px 0 46px 0;
 }
 
 .modal-input {
-    width: 100%;
-    height: 71.3px;
-    margin-bottom: 23px;
-    padding-left: 26.5px;
-    box-sizing: border-box;
-    font-size: 20px;
+  width: 100%;
+  height: 71.3px;
+  margin-bottom: 23px;
+  padding-left: 26.5px;
+  box-sizing: border-box;
+  font-size: 20px;
 }
 
 .modal-input::placeholder {
-    font-size: 20px;
-    color: #757575;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: 400;
+  font-size: 20px;
+  color: #757575;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 400;
 }
 
 .modal-submit-btn {
-    height: 71.3px;
-    width: 100%;
-    margin-top: 23.5px;
-    border: none;
-    border-radius: 4px;
-    background: #16DB99;
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
+  height: 71.3px;
+  width: 100%;
+  margin-top: 23.5px;
+  border: none;
+  border-radius: 4px;
+  background: #16db99;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
 }
 
 .thank-you-message-container {
-    background: #ECFDF5;
-    border-radius: 3px;
-    width: 100%;
-    display: flex;
-    box-sizing: border-box;
-    justify-content: center;
-    align-items: center;
-    font-size: 32px;
-    color: #065F46;
-    padding: 50px 50px;
-    margin-top: 45px;
+  background: #ecfdf5;
+  border-radius: 3px;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: #065f46;
+  padding: 50px 50px;
+  margin-top: 45px;
 }
 
 .thank-you-message {
-    margin: 0;
+  margin: 0;
 }
 
 @media (max-width: 600px) {
-    main {
-        padding: 0px 4vw 30px;
-    }
+  main {
+    padding: 0px 4vw 30px;
+  }
 
-    .dish-icon {
-        font-size: max(13vw, 50px);
-    }
+  .dish-icon {
+    font-size: max(13vw, 50px);
+  }
 
-    .menu-item-description {
-        margin-left: 3vw;
-    }
+  .menu-item-description {
+    margin-left: 3vw;
+  }
 
-    .add-btn {
-        margin: 2.5vw 0 0 auto;
-    }
+  .add-btn {
+    margin: 2.5vw 0 0 auto;
+  }
 }
 
 @media (max-width: 350px) {
-    .modal-input {
-        padding-left: 12px;
-    }
+  .modal-input {
+    padding-left: 12px;
+  }
 }
