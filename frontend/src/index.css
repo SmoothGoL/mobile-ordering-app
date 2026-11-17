@@ -31,11 +31,25 @@ header {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  position: relative;
 }
 
 .header-img {
   width: 100%;
   height: auto;
+}
+
+nav {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  left: 45px;
+  bottom: 20px;
+}
+
+nav a {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
 }
 
 main {

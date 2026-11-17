@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Header from "./components/Header";
 import MenuList from "./components/MenuList";
 import OrderedItems from "./components/OrderedItems";
@@ -8,6 +9,17 @@ import { useCart } from "./hooks/useCart";
 import { menuArray } from "./assets/data";
 
 export default function App() {
+  const navigate = useNavigate();
+  function returnHome(e) {
+    e.preventDefault();
+    navigate('/')
+  }
+
+  function openAccountPage(e) {
+    e.preventDefault();
+    navigate('/account')
+  }
+  
   const {
     orderedItems,
     totalPrice,
@@ -46,7 +58,7 @@ export default function App() {
 
   return (
     <>
-      <Header />
+      <Header returnHome={returnHome} openAccountPage={openAccountPage} />
       <main>
         <MenuList menuItems={menuArray} onAddItem={handleAddItem} />
         {hasActiveOrder && (
