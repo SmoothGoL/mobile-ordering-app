@@ -41,7 +41,7 @@ header {
 
 nav {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   position: absolute;
   left: 45px;
   bottom: 20px;
