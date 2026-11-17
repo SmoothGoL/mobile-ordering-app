@@ -47,14 +47,14 @@ export default function Home({ cart }) {
       <main>
         <MenuList menuItems={menuArray} onAddItem={handleAddItem} />
         {hasActiveOrder && (
-        <OrderedItems
-          orderedItems={orderedItems}
-          totalPrice={totalPrice}
-          onAddItem={handleAddItem}
-          onDecrementItem={decrementItem}
-          onRemoveItem={removeFromCart}
-          showPaymentModal={showPaymentModal}
-        />
+          <OrderedItems
+            orderedItems={orderedItems}
+            totalPrice={totalPrice}
+            onAddItem={handleAddItem}
+            onDecrementItem={decrementItem}
+            onRemoveItem={removeFromCart}
+            showPaymentModal={showPaymentModal}
+          />
         )}
         {completedOrderName !== null && (
           <ThankYouMessage userName={completedOrderName} />

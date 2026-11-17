@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 const CART_STORAGE_KEY = "mobile-ordering-app:cart";
 
 function loadCartFromStorage() {
-  console.log('loading from storage');
   try {
     const savedCart = localStorage.getItem(CART_STORAGE_KEY);
     if (!savedCart) return [];

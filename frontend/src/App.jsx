@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home";
-import AccountPage from './components/AccountPage';
+import AccountPage from "./components/AccountPage";
 import { useCart } from "./hooks/useCart";
 import { menuArray } from "./assets/data";
 
@@ -13,18 +13,18 @@ export default function App() {
     home: <Home cart={cart} />,
     account: <AccountPage />,
   };
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState("home");
 
   function returnHome(e) {
     e.preventDefault();
-    navigate('/');
-    setCurrentPage('home');
+    navigate("/");
+    setCurrentPage("home");
   }
 
   function openAccountPage(e) {
     e.preventDefault();
-    navigate('/account');
-    setCurrentPage('account');
+    navigate("/account");
+    setCurrentPage("account");
   }
 
   return (
