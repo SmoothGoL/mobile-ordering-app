@@ -1,6 +1,6 @@
 import headerImage from "../assets/images/header.png";
 
-export default function Header({ returnHome, openAccountPage }) {
+export default function Header({ numberOfItems, returnHome, openAccountPage }) {
   return (
     <header>
       <img
@@ -10,7 +10,7 @@ export default function Header({ returnHome, openAccountPage }) {
       />
       <nav>
         <a href="/" onClick={returnHome}>
-          Home
+          Home / Cart ({numberOfItems})
         </a>
         <a href="/account" onClick={openAccountPage}>
           Account

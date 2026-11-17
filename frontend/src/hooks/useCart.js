@@ -101,6 +101,11 @@ export function useCart(menuItems) {
     [cart, menuItemsById],
   );
 
+  const numberOfItems = useMemo(
+    () => cart.reduce((total, cartItem) => total + cartItem.quantity, 0),
+    [cart],
+  );
+
   const totalPrice = useMemo(
     () => orderedItems.reduce((total, item) => total + item.subtotal, 0),
     [orderedItems],
@@ -108,6 +113,7 @@ export function useCart(menuItems) {
 
   return {
     orderedItems,
+    numberOfItems,
     totalPrice,
     addToCart,
     decrementItem,

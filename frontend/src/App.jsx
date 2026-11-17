@@ -29,7 +29,11 @@ export default function App() {
 
   return (
     <>
-      <Header returnHome={returnHome} openAccountPage={openAccountPage} />
+      <Header
+        numberOfItems={cart.numberOfItems}
+        returnHome={returnHome}
+        openAccountPage={openAccountPage}
+      />
       {sites[currentPage]}
     </>
   );
