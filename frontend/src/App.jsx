@@ -1,85 +1,36 @@
-import { useState } from "react";
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from "./components/Header";
-import MenuList from "./components/MenuList";
-import OrderedItems from "./components/OrderedItems";
-import PaymentModal from "./components/PaymentModal";
-import ThankYouMessage from "./components/ThankYouMessage";
+import Home from "./components/Home";
+import AccountPage from './components/AccountPage';
 import { useCart } from "./hooks/useCart";
 import { menuArray } from "./assets/data";
 
 export default function App() {
   const navigate = useNavigate();
+  const cart = useCart(menuArray);
+  const sites = {
+    home: <Home cart={cart} />,
+    account: <AccountPage />,
+  };
+  const [currentPage, setCurrentPage] = useState('home');
+
   function returnHome(e) {
     e.preventDefault();
-    navigate('/')
+    navigate('/');
+    setCurrentPage('home');
   }
 
   function openAccountPage(e) {
     e.preventDefault();
-    navigate('/account')
-  }
-  
-  const {
-    orderedItems,
-    totalPrice,
-    addToCart,
-    decrementItem,
-    removeFromCart,
-    clearCart,
-  } = useCart(menuArray);
-  const [hasActiveOrder, setHasActiveOrder] = useState(orderedItems.length > 0);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [completedOrderName, setCompletedOrderName] = useState(null);
-
-  function handleAddItem(newItemId) {
-    addToCart(newItemId);
-    setHasActiveOrder(true);
-    setCompletedOrderName(null);
-  }
-
-  function completePayment(paymentFormData) {
-    const rawName = paymentFormData.get("name");
-    const name = typeof rawName === "string" ? rawName.trim() : "";
-    if (!name) return;
-    clearCart();
-    setHasActiveOrder(false);
-    setIsPaymentModalOpen(false);
-    setCompletedOrderName(name);
-  }
-
-  function handleClosePaymentModal() {
-    setIsPaymentModalOpen(false);
-  }
-
-  function showPaymentModal() {
-    setIsPaymentModalOpen(true);
+    navigate('/account');
+    setCurrentPage('account');
   }
 
   return (
     <>
       <Header returnHome={returnHome} openAccountPage={openAccountPage} />
-      <main>
-        <MenuList menuItems={menuArray} onAddItem={handleAddItem} />
-        {hasActiveOrder && (
-          <OrderedItems
-            orderedItems={orderedItems}
-            totalPrice={totalPrice}
-            onAddItem={handleAddItem}
-            onDecrementItem={decrementItem}
-            onRemoveItem={removeFromCart}
-            showPaymentModal={showPaymentModal}
-          />
-        )}
-        {completedOrderName !== null && (
-          <ThankYouMessage userName={completedOrderName} />
-        )}
-      </main>
-      <PaymentModal
-        onPaymentComplete={completePayment}
-        onClose={handleClosePaymentModal}
-        isVisible={isPaymentModalOpen}
-      />
+      {sites[currentPage]}
     </>
   );
 }
