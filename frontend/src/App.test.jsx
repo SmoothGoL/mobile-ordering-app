@@ -4,13 +4,17 @@ import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
 import App from "./App";
 
+function renderApp() {
+  return render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
+  );
+}
+
 describe("Mobile ordering app user flows", () => {
   it("renders the header and full menu in the initial browsing state", async () => {
-    await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    await renderApp();
     await expect
       .element(
         page.getByRole("img", {
@@ -63,11 +67,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("lets a user add items, adjust quantities, remove items, and disables checkout when empty", async () => {
-    const { container } = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const { container } = await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
 
@@ -121,11 +121,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("combines multiple distinct items and restores saved cart across reload", async () => {
-    const firstRender = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const firstRender = await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Add Hamburger to order" }).click();
@@ -138,11 +134,7 @@ describe("Mobile ordering app user flows", () => {
     await firstRender.unmount();
 
     // Simulate a page reload by mounting a fresh App instance with persisted localStorage
-    const reloadedRender = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const reloadedRender = await renderApp();
 
     await expect
       .element(page.getByRole("heading", { name: "Your order" }))
@@ -164,11 +156,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("opens and dismisses the payment modal via close button, Escape key, and backdrop click without losing the order", async () => {
-    const { container } = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const { container } = await renderApp();
 
     await page.getByRole("button", { name: "Add Hamburger to order" }).click();
 
@@ -208,11 +196,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("preserves entered payment form inputs when the modal is closed without submitting", async () => {
-    await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Complete order" }).click();
@@ -253,11 +237,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("sanitizes non-digit input and enforces browser form validation on payment fields", async () => {
-    const { container } = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const { container } = await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Complete order" }).click();
@@ -298,11 +278,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("completes payment, clears the cart, shows thank you message, and allows starting a new order", async () => {
-    const { container } = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const { container } = await renderApp();
 
     await page.getByRole("button", { name: "Add Hamburger to order" }).click();
     await page.getByRole("button", { name: "Complete order" }).click();
@@ -353,11 +329,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("keeps the payment modal open when clicking inside the dialog", async () => {
-    await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Complete order" }).click();
@@ -372,11 +344,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("enforces maxLength limits and accepts minimum valid card and CVV lengths", async () => {
-    await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Complete order" }).click();
@@ -403,11 +371,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("resets payment form inputs after submission so a subsequent order starts with an empty form", async () => {
-    await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Complete order" }).click();
@@ -430,11 +394,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("re-enables checkout when an item is added after emptying the order", async () => {
-    const { container } = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const { container } = await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Remove Pizza from order" }).click();
@@ -453,11 +413,7 @@ describe("Mobile ordering app user flows", () => {
 
   it("renders initial browsing state cleanly when localStorage has corrupted or unknown-only cart data", async () => {
     localStorage.setItem("mobile-ordering-app:cart", "{invalid-json");
-    const corruptedRender = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const corruptedRender = await renderApp();
 
     await expect
       .element(page.getByRole("heading", { name: "Your order" }))
@@ -471,11 +427,7 @@ describe("Mobile ordering app user flows", () => {
       "mobile-ordering-app:cart",
       JSON.stringify([{ itemId: 999, quantity: 2 }]),
     );
-    await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    await renderApp();
 
     await expect
       .element(page.getByRole("heading", { name: "Your order" }))
@@ -486,11 +438,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("rejects whitespace-only name submission and keeps the order intact", async () => {
-    const { container } = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const { container } = await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Complete order" }).click();
@@ -521,11 +469,7 @@ describe("Mobile ordering app user flows", () => {
       JSON.stringify([{ itemId: 0, quantity: 2 }]),
     );
 
-    await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    await renderApp();
 
     await expect
       .element(page.getByRole("heading", { name: "Your order" }))
@@ -550,11 +494,7 @@ describe("Mobile ordering app user flows", () => {
   });
 
   it("adjusts one item quantity without affecting other items in a multi-item order", async () => {
-    const { container } = await render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
+    const { container } = await renderApp();
 
     await page.getByRole("button", { name: "Add Pizza to order" }).click();
     await page.getByRole("button", { name: "Add Hamburger to order" }).click();
